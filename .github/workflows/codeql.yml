@@ -1,6 +1,7 @@
 name: CodeQL
 
-# Static analysis of the GitHub Actions workflows (injection, excessive permissions, untrusted checkout).
+# Static analysis of the GitHub Actions workflows (injection, excessive permissions, untrusted checkout) and the
+# Python build/check scripts. JavaScript/TypeScript joins once the app is released into this repo.
 # Required status check on main. Advanced setup, because default setup only works once workflows exist on main.
 
 on:
@@ -15,7 +16,11 @@ permissions: {}
 
 jobs:
   analyze:
-    name: Analyze (actions)
+    name: Analyze (${{ matrix.language }})
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ actions, python ]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -27,8 +32,9 @@ jobs:
           persist-credentials: false
       - uses: github/codeql-action/init@915412ff23e8b7659517e607487dbeae018f2934 # v4.39.5
         with:
-          languages: actions
+          languages: ${{ matrix.language }}
+          build-mode: none
           queries: security-extended
       - uses: github/codeql-action/analyze@915412ff23e8b7659517e607487dbeae018f2934 # v4.39.5
         with:
-          category: /language:actions
+          category: /language:${{ matrix.language }}
