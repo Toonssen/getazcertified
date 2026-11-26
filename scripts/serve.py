@@ -7,6 +7,7 @@ Usage: python3 scripts/serve.py [dist] [port]     (binds 127.0.0.1)
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from functools import partial
@@ -38,13 +39,16 @@ class PagesHandler(SimpleHTTPRequestHandler):
     rules: list = []
 
     def resolve(self, url_path: str) -> Path | None:
-        root = Path(self.directory)
-        p = unquote(url_path).split("?", 1)[0]
-        rel = p.strip("/")
-        candidates = [root / "index.html"] if rel == "" else [root / rel, root / f"{rel}.html", root / rel / "index.html"]
-        for c in candidates:
-            if c.is_file() and c.resolve().is_relative_to(root.resolve()):
-                return c
+        root = os.path.realpath(self.directory)
+        rel = unquote(url_path).split("?", 1)[0].strip("/")
+        names = ["index.html"] if rel == "" else [rel, f"{rel}.html", os.path.join(rel, "index.html")]
+        for name in names:
+            # Normalise first, then require the result to stay inside the served directory.
+            full = os.path.realpath(os.path.normpath(os.path.join(root, name)))
+            if not full.startswith(root + os.sep):
+                continue
+            if os.path.isfile(full):
+                return Path(full)
         return None
 
     def send_rule_headers(self, url_path: str) -> None:

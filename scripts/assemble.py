@@ -18,6 +18,7 @@ import hashlib
 import re
 import shutil
 import sys
+from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,12 +26,36 @@ SITE = ROOT / "site"
 LINE_LIMIT = 2000
 JS_TYPES = {"", "text/javascript", "application/javascript", "module"}
 
-SCRIPT_RE = re.compile(r"<script\b([^>]*)>(.*?)</script>", re.S | re.I)
 ATTR_RE = re.compile(r'([a-zA-Z:-]+)\s*=\s*"([^"]*)"')
 LOAD_RE = re.compile(r'<(?:script|img|iframe|source|video|audio|embed|object)\b[^>]*\b(?:src|data)="((?:https?:)?//[^"]+)"', re.I)
 LINK_RE = re.compile(r"<link\b([^>]*)>", re.I)
 # <link> rels that make the browser fetch something; canonical/alternate are only metadata.
 LOADING_RELS = {"stylesheet", "preload", "modulepreload", "prefetch", "preconnect", "dns-prefetch", "icon", "manifest", "apple-touch-icon"}
+
+
+class InlineScripts(HTMLParser):
+    """Collects the exact text of every inline executable <script> (what the browser hashes for the CSP)."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.scripts: list[str] = []
+        self._buf: list[str] | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "script":
+            return
+        a = {k.lower(): (v or "") for k, v in attrs}
+        executable = "src" not in a and a.get("type", "").strip().lower() in JS_TYPES
+        self._buf = [] if executable else None
+
+    def handle_data(self, data: str) -> None:
+        if self._buf is not None:
+            self._buf.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "script" and self._buf is not None:
+            self.scripts.append("".join(self._buf))
+            self._buf = None
 
 
 def fail(msg: str) -> None:
@@ -82,10 +107,11 @@ def main() -> None:
                 loads.append(href)
         if loads:
             fail(f"{page.relative_to(dist)} loads from another origin: {loads[:3]}")
-        for attrs, body in SCRIPT_RE.findall(html):
-            a = dict(ATTR_RE.findall(attrs))
-            if "src" in a or a.get("type", "").lower() not in JS_TYPES:
-                continue  # external file (covered by 'self') or data block such as application/ld+json
+        parser = InlineScripts()
+        parser.feed(html)
+        parser.close()
+        # External files are covered by 'self'; data blocks such as application/ld+json don't execute.
+        for body in parser.scripts:
             digest = base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode()
             hashes.add(f"'sha256-{digest}'")
 
