@@ -138,3 +138,4 @@ Questions are original. Write each scenario yourself from the Microsoft Learn do
 guide. Never copy or reconstruct real exam items, braindumps or another site's or course's questions. If you remember
 a question, don't write it down: write a new scenario that tests the skill.
 <!-- probe 1 -->
+<!-- probe 2 -->
