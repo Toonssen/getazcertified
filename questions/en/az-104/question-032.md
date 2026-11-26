@@ -6,8 +6,10 @@ question: |-
 
   When will inv-02.pdf most likely be moved back to the Archive tier?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview"
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
+  - title: "Blob rehydration from the archive tier"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview"
+  - title: "Lifecycle management overview"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "calculate"

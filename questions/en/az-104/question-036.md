@@ -7,7 +7,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "Azure Backup can back up the file shares in stweb01 with the current network configuration."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
+documentation:
+  - title: "Storage firewall and network access"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

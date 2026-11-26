@@ -7,6 +7,7 @@
  */
 
 import { join } from "node:path";
+import { toDocLinks, type DocLink } from "./doc-links";
 import { existsSync } from "node:fs";
 import { parseDirectory } from "mdquiz";
 
@@ -21,8 +22,8 @@ export interface Question {
   answers: { id: string; text: string; isCorrect: boolean; explanation?: string }[];
   isMultiSelect: boolean;
   codeBlock?: string;
-  /** Learn pages backing the answer: one or more, first one is the main page. */
-  documentation?: string[];
+  /** Learn pages backing the answer: one to three, each with a short title; the first is the main page. */
+  documentation?: DocLink[];
 }
 
 export interface CertInfo {
@@ -58,11 +59,8 @@ function contentDir(locale: SupportedLocale): string {
   return join(process.cwd(), "..", "questions", locale);
 }
 
-/** Frontmatter `documentation` is a single URL or a YAML list of URLs. */
-export function toDocLinks(value: unknown): string[] {
-  const list = Array.isArray(value) ? value : value ? [value] : [];
-  return list.filter((v): v is string => typeof v === "string" && v.length > 0);
-}
+export { toDocLinks } from "./doc-links";
+export type { DocLink } from "./doc-links";
 
 // ── Loader (cached per locale) ──────────────────────────────────────
 

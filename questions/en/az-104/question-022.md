@@ -6,8 +6,10 @@ question: |-
 
   What should you do?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets"
-  - "https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/spending-limit"
+  - title: "Create and manage budgets"
+    url: "https://learn.microsoft.com/en-us/azure/cost-management-billing/costs/tutorial-acm-create-budgets"
+  - title: "Azure spending limit"
+    url: "https://learn.microsoft.com/en-us/azure/cost-management-billing/manage/spending-limit"
 skill_area: "subscriptions-governance"
 study_guide: "2026-04-17"
 archetype: "best-choice"

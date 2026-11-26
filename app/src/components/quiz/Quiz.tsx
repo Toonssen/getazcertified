@@ -240,10 +240,10 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
               </div>
             ) : undefined
           }
-          documentationHrefs={currentQuestion.documentation}
+          documentation={currentQuestion.documentation}
           reportHref={IS_PREVIEW ? undefined : `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${cert}/question-${currentQuestion.id.replace(`${cert}-`, "")}.md)` }))}&labels=question-issue`}
           learnMoreLabel={tQ("learnMore")}
-          moreDocsLabel={tQ("moreDocs")}
+          mainDocLabel={tQ("mainDoc")}
           reportLabel={tQ("report")}
           reportTooltip={tQ("reportTooltip")}
           footer={

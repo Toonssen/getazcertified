@@ -8,9 +8,12 @@ question: |-
 
   What should you do first?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
-  - "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
-  - "https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access"
+  - title: "Share-level permissions for Azure Files"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
+  - title: "Azure Files identity-based auth"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
+  - title: "Authorize data access in Azure Storage"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "best-choice"

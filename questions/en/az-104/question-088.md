@@ -6,8 +6,10 @@ question: |-
 
   To which virtual networks can you connect vm-erp1?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/network-overview"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-vnet-plan-design-arm"
+  - title: "Virtual networks and VMs"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/network-overview"
+  - title: "Plan Azure virtual networks"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-vnet-plan-design-arm"
 skill_area: "virtual-networks"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

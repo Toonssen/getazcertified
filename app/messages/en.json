@@ -73,10 +73,10 @@
     "correct": "Correct",
     "incorrect": "Incorrect",
     "learnMore": "Learn more in the docs",
-    "moreDocs": "More in the docs",
     "previous": "Previous",
     "nextQuestion": "Next question",
-    "questionOf": "Question {current} of {total}"
+    "questionOf": "Question {current} of {total}",
+    "mainDoc": "Main page"
   },
   "ChallengeCommon": {
     "confirm": "Confirm",

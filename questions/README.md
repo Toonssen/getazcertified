@@ -20,7 +20,9 @@ question: |-
   You need to deploy a virtual machine named VM1 to West Europe.
 
   To which virtual networks can you connect VM1?
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-network/network-overview"
+documentation:
+  - title: "Virtual networks and VMs"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/network-overview"
 skill_area: "virtual-networks"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"
@@ -48,11 +50,38 @@ Only these keys, in this exact form (the checker accepts this subset of YAML and
 | key | required | value |
 |---|---|---|
 | `question` | yes | `\|-` block indented two spaces: **one line per paragraph** (line breaks are shown as-is), a blank line between paragraphs, `- ` for requirement lists; or a one-line `"…"` string |
-| `documentation` | yes | one to three `https://learn.microsoft.com/` pages that back the answer and the explanations: a single `"url"`, or a list of `  - "url"` lines under `documentation:`. The first is the main page |
+| `documentation` | yes | one to three Microsoft Learn pages that back the answer and the explanations, each a `title` + `url` pair, main page first. See [Documentation links](#documentation-links) |
 | `skill_area` | yes | one of the study guide's skill areas, see below |
 | `study_guide` | yes | the skills-measured date the question was written against (`"2026-04-17"` for AZ-104) |
 | `archetype` | yes | `best-choice`, `exhibit-select`, `exhibit-statement`, `complete-statement`, `complete-code`, `calculate`, `goal-solution`, `choose-n`, `fact-recall` |
 | `series` | no | slug shared by questions that reuse one scenario |
+
+### Documentation links
+
+Every question lists the Microsoft Learn pages that back its answer. Readers see them in the **Learn more in the docs**
+menu above the question, by their title. Write each entry as two lines: the title, then the URL, indented exactly like this:
+
+```yaml
+documentation:
+  - title: "Share-level permissions for Azure Files"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
+  - title: "Azure Files identity-based auth"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
+```
+
+- **One to three entries.** The first is the main page: the one that settles the answer.
+- **`url`**: a `https://learn.microsoft.com/` page that states the facts in your explanations. Copy it from the browser;
+  the `en-us/` part is fine.
+- **`title`**: a short label for that page, **at most 40 characters** (counting spaces). Name the page's topic, in
+  sentence case, as plain text: `"Azure Storage redundancy"`, `"What is a private endpoint?"`, `"Steps to assign an Azure role"`.
+  - Start from the page's own heading and shorten it; drop the product suffix Learn adds (`"... - Azure Monitor"`).
+  - Don't add words the menu already says: no "docs", "documentation" or "Microsoft Learn".
+  - No period at the end, no Markdown, no quotes.
+  - The same page gets the same title in every question (search the folder for the URL before inventing a new one).
+- Two entries in one question can't share a URL or a title.
+
+The checker tells you what to fix, for example
+`documentation[2].title 'Overview of the Azure Monitor alert types' is 41 characters; keep it to 40 (e.g. "Share-level permissions")`.
 
 AZ-104 skill areas, by functional group (weights from the study guide):
 
@@ -75,7 +104,7 @@ AZ-104 skill areas, by functional group (weights from the study guide):
 
 ## Rules (enforced by `scripts/check_questions.py`)
 
-- All required keys are present, the values come from the closed sets above, and `documentation` holds one to three distinct Learn URLs.
+- All required keys are present, the values come from the closed sets above, and `documentation` holds one to three `title` + `url` entries with distinct Learn URLs and titles of at most 40 characters (see [Documentation links](#documentation-links)).
 - There are at least 2 answers and at least one correct, with no duplicates, and every answer has an explanation.
 - "Which two/three…" matches the number of correct answers, and multi-select always says how many.
 - `exhibit-statement` and `goal-solution` answers are exactly `Yes` and `No`. `exhibit-*` questions have an exhibit block.

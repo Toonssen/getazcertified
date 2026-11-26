@@ -5,7 +5,9 @@ question: |-
   You need to run orders:2.4 on vm-ops01.
 
   What should you install on vm-ops01 first?
-documentation: "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli"
+documentation:
+  - title: "Push and pull images with ACR"
+    url: "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli"
 skill_area: "containers"
 study_guide: "2026-04-17"
 archetype: "best-choice"

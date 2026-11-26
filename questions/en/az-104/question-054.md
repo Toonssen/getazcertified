@@ -5,7 +5,9 @@ question: |-
   Select the answer that completes the following statement.
 
   "If CPU usage is 90 percent for the first seven minutes after deployment, vmss-batch will be running ____."
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-autoscale-overview"
+documentation:
+  - title: "Autoscale with scale sets"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-autoscale-overview"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

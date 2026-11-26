@@ -5,7 +5,9 @@ question: |-
   You create an application security group named asg-web.
 
   Which resources can use or contain asg-web?
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-network/application-security-groups"
+documentation:
+  - title: "Application security groups"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/application-security-groups"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

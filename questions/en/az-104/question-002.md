@@ -9,7 +9,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "vnet-sales has the Owner: ops-team tag."
-documentation: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-policies"
+documentation:
+  - title: "Policy definitions for tagging"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-policies"
 skill_area: "subscriptions-governance"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

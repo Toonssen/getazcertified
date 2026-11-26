@@ -5,7 +5,9 @@ question: |-
   You need to grant access to a resource for the Finance department's users and the Windows devices registered to them by using dynamic membership. The solution must minimize administrative effort.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership"
+documentation:
+  - title: "Dynamic membership group rules"
+    url: "https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

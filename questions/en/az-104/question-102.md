@@ -10,7 +10,9 @@ question: |-
   - Instant restore resource group: rg-crm-restore
 
   How many instant recovery snapshots of vm-crm1 are kept in rg-crm-restore on March 20?
-documentation: "https://learn.microsoft.com/en-us/azure/backup/backup-instant-restore-capability"
+documentation:
+  - title: "Instant Restore for VM backups"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-instant-restore-capability"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "calculate"

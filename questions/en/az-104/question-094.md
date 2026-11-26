@@ -6,8 +6,10 @@ question: |-
 
   What should you create first?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/backup/multi-user-authorization-concept"
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources"
+  - title: "Multi-user auth with Resource Guard"
+    url: "https://learn.microsoft.com/en-us/azure/backup/multi-user-authorization-concept"
+  - title: "Resource locks"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "best-choice"

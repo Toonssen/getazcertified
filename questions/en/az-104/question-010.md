@@ -7,7 +7,9 @@ question: |-
   You need to ensure that Dev1 can invite guest users. The solution must not change any tenant-wide setting and must follow the principle of least privilege.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/entra/external-id/external-collaboration-settings-configure"
+documentation:
+  - title: "External collaboration settings"
+    url: "https://learn.microsoft.com/en-us/entra/external-id/external-collaboration-settings-configure"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

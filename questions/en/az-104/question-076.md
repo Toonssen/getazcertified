@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "A VM in VNet-Hub resolves db1.corp.example to 10.30.0.5."
-documentation: "https://learn.microsoft.com/en-us/azure/dns/private-dns-privatednszone"
+documentation:
+  - title: "Azure Private DNS zones"
+    url: "https://learn.microsoft.com/en-us/azure/dns/private-dns-privatednszone"
 skill_area: "name-resolution-load-balancing"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

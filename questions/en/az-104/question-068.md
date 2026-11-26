@@ -5,7 +5,9 @@ question: |-
   You plan to deploy a new Azure Container Instances container group into the virtual network.
 
   To which subnets can you deploy the container group?
-documentation: "https://learn.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts"
+documentation:
+  - title: "Container Instances in a virtual network"
+    url: "https://learn.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts"
 skill_area: "containers"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

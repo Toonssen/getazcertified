@@ -25,6 +25,26 @@ test.describe("quiz flow", () => {
     expect(await options.count()).toBeGreaterThanOrEqual(2);
   });
 
+  test("docs links sit in one menu, each with a title", async ({ page }) => {
+    const trigger = page.getByTestId("docs-menu-trigger");
+    await expect(trigger).toHaveCount(1);
+    await trigger.click();
+    const items = page.getByRole("menuitem");
+    await expect(items.first()).toBeVisible(); // count() doesn't wait for the menu to open
+    const n = await items.count();
+    expect(n).toBeGreaterThanOrEqual(1);
+    expect(n).toBeLessThanOrEqual(3);
+    for (let i = 0; i < n; i++) {
+      const item = items.nth(i);
+      await expect(item).toHaveAttribute("href", /^https:\/\/learn\.microsoft\.com\//);
+      await expect(item).toHaveAttribute("target", "_blank");
+      const text = (await item.innerText()).trim();
+      expect(text.length).toBeGreaterThanOrEqual(3);
+    }
+    await page.keyboard.press("Escape");
+    await expect(items).toHaveCount(0);
+  });
+
   test("can select an answer and navigate next", async ({ page }) => {
     // Select first answer option
     const answerGroup = page.getByRole("radiogroup", { name: /answer options/i }).or(

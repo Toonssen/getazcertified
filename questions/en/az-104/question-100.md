@@ -5,7 +5,9 @@ question: |-
   You need to analyze who accessed kv-pay's secrets over the last 30 days by running Kusto Query Language (KQL) queries.
 
   To which destination should you send kv-pay's resource logs in a diagnostic setting?
-documentation: "https://learn.microsoft.com/en-us/azure/azure-monitor/platform/diagnostic-settings"
+documentation:
+  - title: "Diagnostic settings in Azure Monitor"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/platform/diagnostic-settings"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

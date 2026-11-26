@@ -5,7 +5,9 @@ question: |-
   You need to ensure that a user named User4 can assign Azure roles to other users for RG-App. User4 must not be able to create, modify, or delete resources in RG-App.
 
   Which role should you assign to User4 for RG-App?
-documentation: "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
+documentation:
+  - title: "Azure built-in roles"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
 skill_area: "access-azure-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

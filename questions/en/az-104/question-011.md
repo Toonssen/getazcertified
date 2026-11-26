@@ -5,7 +5,9 @@ question: |-
   You need to enable SSPR for the members of HR-Staff and IT-Staff only, by using the Microsoft Entra admin center.
 
   What should you do first?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/authentication/tutorial-enable-sspr"
+documentation:
+  - title: "Self-service password reset"
+    url: "https://learn.microsoft.com/en-us/entra/identity/authentication/tutorial-enable-sspr"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

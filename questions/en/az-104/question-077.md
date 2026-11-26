@@ -6,8 +6,10 @@ question: |-
 
   What should you do first?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/bastion/bastion-sku-comparison"
-  - "https://learn.microsoft.com/en-us/azure/bastion/configuration-settings"
+  - title: "Choose an Azure Bastion SKU"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/bastion-sku-comparison"
+  - title: "Azure Bastion configuration settings"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/configuration-settings"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "best-choice"

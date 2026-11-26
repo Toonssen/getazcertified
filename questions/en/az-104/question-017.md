@@ -5,7 +5,9 @@ question: |-
   You are creating the custom role shown in the following exhibit. Members of the operations team must be able to start, stop, restart, and reconfigure virtual machines, but the role must not allow them to delete virtual machines.
 
   Which value should you use for <value>?
-documentation: "https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions"
+documentation:
+  - title: "Azure role definitions"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/role-definitions"
 skill_area: "access-azure-resources"
 study_guide: "2026-04-17"
 archetype: "complete-code"

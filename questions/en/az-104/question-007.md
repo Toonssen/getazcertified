@@ -7,7 +7,9 @@ question: |-
   You are writing the membership rule shown in the following exhibit.
 
   Which value should you use for <property>?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership"
+documentation:
+  - title: "Dynamic membership group rules"
+    url: "https://learn.microsoft.com/en-us/entra/identity/users/groups-dynamic-membership"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "complete-code"

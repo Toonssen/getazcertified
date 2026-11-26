@@ -5,7 +5,9 @@ question: |-
   You assign a Microsoft 365 E3 license to G-Staff by using group-based licensing.
 
   Which users receive the license from G-Staff?
-documentation: "https://learn.microsoft.com/en-us/entra/fundamentals/concept-group-based-licensing"
+documentation:
+  - title: "Group-based licensing"
+    url: "https://learn.microsoft.com/en-us/entra/fundamentals/concept-group-based-licensing"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

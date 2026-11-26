@@ -5,7 +5,9 @@ question: |-
   A tester needs to push a test image to crshop42 from a laptop by running docker login with a username and password. The solution must minimize administrative effort.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-authentication"
+documentation:
+  - title: "Container Registry authentication"
+    url: "https://learn.microsoft.com/en-us/azure/container-registry/container-registry-authentication"
 skill_area: "containers"
 study_guide: "2026-04-17"
 archetype: "best-choice"

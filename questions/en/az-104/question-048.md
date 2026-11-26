@@ -11,8 +11,10 @@ question: |-
 
   "The storage accounts are created in the West Europe region."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource"
+  - title: "Deploy multiple resource instances"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
+  - title: "Template functions: resources"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource"
 skill_area: "arm-bicep"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"
