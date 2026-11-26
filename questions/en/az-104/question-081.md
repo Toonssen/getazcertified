@@ -6,8 +6,10 @@ question: |-
 
   What should you create first?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/firewall/tutorial-firewall-deploy-portal"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview"
+  - title: "Deploy Azure Firewall in the portal"
+    url: "https://learn.microsoft.com/en-us/azure/firewall/tutorial-firewall-deploy-portal"
+  - title: "Virtual network traffic routing"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview"
 skill_area: "virtual-networks"
 study_guide: "2026-04-17"
 archetype: "best-choice"

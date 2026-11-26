@@ -5,7 +5,9 @@ question: |-
   You need a scale set to which you can add standard Azure virtual machines that each have their own configuration.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-orchestration-modes"
+documentation:
+  - title: "Scale set orchestration modes"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-orchestration-modes"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "best-choice"

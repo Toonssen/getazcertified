@@ -5,7 +5,9 @@ question: |-
   You need to ensure that the helpdesk staff in Amsterdam can reset the passwords of Amsterdam users only.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units"
+documentation:
+  - title: "Administrative units"
+    url: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

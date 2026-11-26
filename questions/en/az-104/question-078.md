@@ -6,8 +6,10 @@ question: |-
 
   "You can connect to vm-win1 through bas-1 by using the Remote Desktop Connection client (mstsc) on your computer."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/bastion/native-client"
-  - "https://learn.microsoft.com/en-us/azure/bastion/bastion-sku-comparison"
+  - title: "Bastion native client connections"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/native-client"
+  - title: "Choose an Azure Bastion SKU"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/bastion-sku-comparison"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

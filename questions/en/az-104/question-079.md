@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "You can use the Azure portal to connect to vm-lin2 through bas-1 by using SSH."
-documentation: "https://learn.microsoft.com/en-us/azure/bastion/vnet-peering"
+documentation:
+  - title: "VNet peering and Azure Bastion"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/vnet-peering"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

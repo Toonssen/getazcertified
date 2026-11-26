@@ -6,8 +6,10 @@ question: |-
 
   "A VM in VNet-App2 resolves db1.corp.example to 10.20.0.5."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/dns/private-dns-privatednszone"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances"
+  - title: "Azure Private DNS zones"
+    url: "https://learn.microsoft.com/en-us/azure/dns/private-dns-privatednszone"
+  - title: "Name resolution for VMs"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-name-resolution-for-vms-and-role-instances"
 skill_area: "name-resolution-load-balancing"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

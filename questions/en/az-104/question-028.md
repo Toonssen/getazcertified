@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "After deployment, a block blob that was overwritten 12 days ago can be returned to its earlier state by using point-in-time restore."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/blobs/point-in-time-restore-overview"
+documentation:
+  - title: "Point-in-time restore for block blobs"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/point-in-time-restore-overview"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

@@ -5,7 +5,9 @@ question: |-
   You need to automatically tier and expire data by using lifecycle management.
 
   On which storage accounts can you configure lifecycle management?
-documentation: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
+documentation:
+  - title: "Lifecycle management overview"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

@@ -7,7 +7,9 @@ question: |-
   You need to create a user account for each employee in the Microsoft Entra admin center. The solution must minimize administrative effort.
 
   What should you use?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/users/users-bulk-add"
+documentation:
+  - title: "Bulk create users"
+    url: "https://learn.microsoft.com/en-us/entra/identity/users/users-bulk-add"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

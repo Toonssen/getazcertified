@@ -3,7 +3,9 @@ question: |-
   You plan a management group hierarchy for your company's Azure subscriptions.
 
   How many levels of management groups can the hierarchy contain below the root management group?
-documentation: "https://learn.microsoft.com/en-us/azure/governance/management-groups/overview"
+documentation:
+  - title: "Management groups"
+    url: "https://learn.microsoft.com/en-us/azure/governance/management-groups/overview"
 skill_area: "subscriptions-governance"
 study_guide: "2026-04-17"
 archetype: "fact-recall"

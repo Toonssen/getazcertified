@@ -6,8 +6,10 @@ question: |-
 
   What should you use?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/network-watcher/ip-flow-verify-overview"
-  - "https://learn.microsoft.com/en-us/azure/network-watcher/connection-monitor-overview"
+  - title: "IP flow verify"
+    url: "https://learn.microsoft.com/en-us/azure/network-watcher/ip-flow-verify-overview"
+  - title: "Connection Monitor"
+    url: "https://learn.microsoft.com/en-us/azure/network-watcher/connection-monitor-overview"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

@@ -3,7 +3,9 @@ question: |-
   You plan to encrypt an Azure Storage account by using a customer-managed key stored in Azure Key Vault Premium.
 
   Which keys can you use?
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
+documentation:
+  - title: "Customer-managed keys"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "fact-recall"

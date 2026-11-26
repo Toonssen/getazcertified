@@ -5,7 +5,9 @@ question: |-
   Select the answer that completes the following statement.
 
   "Over the public endpoint of stweb01, vm-db1 ____ connect to the file shares."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
+documentation:
+  - title: "Storage firewall and network access"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

@@ -4,8 +4,10 @@ question: |-
 
   Which items' backups does rsv-core's soft delete protect?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/backup/secure-by-default"
-  - "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-prevent-file-share-deletion"
+  - title: "Soft delete for Azure Backup"
+    url: "https://learn.microsoft.com/en-us/azure/backup/secure-by-default"
+  - title: "Soft delete for Azure file shares"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-prevent-file-share-deletion"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

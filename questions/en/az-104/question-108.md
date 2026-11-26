@@ -5,7 +5,9 @@ question: |-
   You need to recover only that folder from yesterday's recovery point, without restoring a disk or a VM.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-restore-files-from-vm"
+documentation:
+  - title: "Recover files from a VM backup"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-restore-files-from-vm"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "best-choice"

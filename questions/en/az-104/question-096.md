@@ -3,7 +3,9 @@ question: |-
   You have a resource group named RG-Ops that contains a virtual machine named vm-ops1. You create the activity log alert rules shown in the following exhibit, and then two users perform the actions shown in the second exhibit.
 
   Which alert rules does UserB's action trigger?
-documentation: "https://learn.microsoft.com/en-us/azure/azure-monitor/platform/activity-log-schema"
+documentation:
+  - title: "Activity log event schema"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/platform/activity-log-schema"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

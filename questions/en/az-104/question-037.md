@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "A client that has the public IP address 198.51.100.7 can read blobs in stexport02 by using the account access key."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
+documentation:
+  - title: "Storage firewall and network access"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

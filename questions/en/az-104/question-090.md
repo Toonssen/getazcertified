@@ -7,7 +7,9 @@ question: |-
   Select the answer that completes the following statement.
 
   "In a route table associated with snet-quarantine, add a route for 0.0.0.0/0 that has a next hop type of ____."
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview"
+documentation:
+  - title: "Virtual network traffic routing"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview"
 skill_area: "virtual-networks"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

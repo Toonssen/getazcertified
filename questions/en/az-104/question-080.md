@@ -6,8 +6,10 @@ question: |-
 
   "You can use the Azure portal to connect to vm-lin3 through bas-1."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/bastion/vnet-peering"
-  - "https://learn.microsoft.com/en-us/azure/networking/cross-service-scenarios/design-secure-hub-spoke-network"
+  - title: "VNet peering and Azure Bastion"
+    url: "https://learn.microsoft.com/en-us/azure/bastion/vnet-peering"
+  - title: "Secure hub-spoke network design"
+    url: "https://learn.microsoft.com/en-us/azure/networking/cross-service-scenarios/design-secure-hub-spoke-network"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

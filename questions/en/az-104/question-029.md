@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "The data in stlog01 is stored as three copies within the North Europe region."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy"
+documentation:
+  - title: "Azure Storage redundancy"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/storage-redundancy"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

@@ -5,7 +5,9 @@ question: |-
   The developer asks which ways the app can authorize its blob read requests.
 
   What should you tell the developer?
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access"
+documentation:
+  - title: "Authorize data access in Azure Storage"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "fact-recall"

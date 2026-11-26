@@ -5,7 +5,9 @@ question: |-
   You need to run a background script on a schedule by using WebJobs.
 
   Which apps support WebJobs?
-documentation: "https://learn.microsoft.com/en-us/azure/app-service/overview-webjobs"
+documentation:
+  - title: "App Service WebJobs"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/overview-webjobs"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

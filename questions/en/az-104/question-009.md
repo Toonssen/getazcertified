@@ -8,7 +8,9 @@ question: |-
   - Storage Queue Data Contributor
 
   Which two actions can User2 perform?
-documentation: "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
+documentation:
+  - title: "Azure built-in roles"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
 skill_area: "access-azure-resources"
 study_guide: "2026-04-17"
 archetype: "choose-n"

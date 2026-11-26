@@ -8,8 +8,10 @@ question: |-
 
   Which value should you use for <action>?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-policy-structure"
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview"
+  - title: "Lifecycle management policy structure"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-policy-structure"
+  - title: "Blob access tiers"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "complete-code"

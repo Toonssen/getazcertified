@@ -6,8 +6,10 @@ question: |-
 
   Which service should you use?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/load-balancing-overview"
-  - "https://learn.microsoft.com/en-us/azure/application-gateway/overview"
+  - title: "Load balancing options"
+    url: "https://learn.microsoft.com/en-us/azure/architecture/guide/technology-choices/load-balancing-overview"
+  - title: "What is Azure Application Gateway?"
+    url: "https://learn.microsoft.com/en-us/azure/application-gateway/overview"
 skill_area: "name-resolution-load-balancing"
 study_guide: "2026-04-17"
 archetype: "best-choice"

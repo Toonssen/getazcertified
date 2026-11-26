@@ -6,8 +6,10 @@ question: |-
 
   Which items are still present after the resize?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/resize-vm"
-  - "https://learn.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview"
+  - title: "Resize a virtual machine"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/resize-vm"
+  - title: "Azure Disk Storage overview"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/managed-disks-overview"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

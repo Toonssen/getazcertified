@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "On May 23, inv-01.pdf still exists in stbilling01."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
+documentation:
+  - title: "Lifecycle management overview"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

@@ -10,8 +10,10 @@ question: |-
 
   Which encryption method should you use?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview"
-  - "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption"
+  - title: "Managed disk encryption options"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview"
+  - title: "Server-side encryption of managed disks"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "best-choice"

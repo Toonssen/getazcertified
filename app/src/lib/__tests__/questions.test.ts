@@ -61,3 +61,27 @@ describe("question parsing", () => {
     });
   }
 });
+
+describe("documentation links", () => {
+  it("every question has 1–3 titled Learn links (title + url frontmatter)", async () => {
+    const { getQuestionsByCert } = await import("../questions");
+    const questions = getQuestionsByCert("az-104");
+    expect(questions.length).toBeGreaterThan(0);
+    for (const q of questions) {
+      const docs = q.documentation ?? [];
+      expect(docs.length, q.id).toBeGreaterThanOrEqual(1);
+      expect(docs.length, q.id).toBeLessThanOrEqual(3);
+      for (const d of docs) {
+        expect(d.url, q.id).toMatch(/^https:\/\/learn\.microsoft\.com\//);
+        expect(d.title.length, `${q.id} ${d.title}`).toBeLessThanOrEqual(40);
+        expect(d.title, q.id).not.toMatch(/^[a-z0-9 ]+$/); // a real title, not the slug fallback
+      }
+    }
+    const q25 = questions.find((q) => q.id === "az-104-025");
+    expect(q25?.documentation?.map((d) => d.title)).toEqual([
+      "Share-level permissions for Azure Files",
+      "Azure Files identity-based auth",
+      "Authorize data access in Azure Storage",
+    ]);
+  });
+});

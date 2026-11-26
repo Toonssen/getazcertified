@@ -6,7 +6,7 @@
 
 Standard library only. The frontmatter reader accepts a deliberately small YAML subset
 (see questions/README.md): `key: "value"` lines, `question: |-` blocks and a
-`documentation:` list of `  - "url"` lines. Anything
+`documentation:` list of `  - title: "…"` / `    url: "…"` pairs. Anything
 else is reported instead of guessed at. Parsing compatibility with mdquiz itself is
 covered separately by app/src/lib/__tests__/questions.test.ts.
 """
@@ -85,6 +85,11 @@ REQUIRED_KEYS = ("question", "documentation", "skill_area", "study_guide", "arch
 OPTIONAL_KEYS = ("series",)
 LEARN_PREFIX = "https://learn.microsoft.com/"
 MAX_DOC_LINKS = 3
+DOC_TITLE_MIN = 3
+DOC_TITLE_MAX = 40  # fits one line of the "Learn more in the docs" menu, also on a phone
+DOC_EXAMPLE = '  - title: "Share-level permissions"\n    url: "https://learn.microsoft.com/en-us/azure/..."'
+# Words that only repeat what the menu already says, or leftovers of a Learn page title ("... - Azure Monitor").
+DOC_TITLE_FILLER = re.compile(r"microsoft learn|\bdocs?\b|\bdocumentation\b|\s-\s|\|", re.IGNORECASE)
 NUMBER_WORDS = {"two": 2, "three": 3, "four": 4}
 COUNT_RE = re.compile(r"\b(?:Which|What)\s+(two|three|four)\b", re.IGNORECASE)
 ANSWER_RE = re.compile(r"^(?:\d+\.|-) \[([xX ]?)\] (.*)$")
@@ -95,7 +100,7 @@ LINK_RE = re.compile(r"https://learn\.microsoft\.com/[^\s)\]>\"']+")
 class Question:
     path: Path
     cert: str
-    meta: dict[str, str | list[str]] = field(default_factory=dict)
+    meta: dict[str, str | list] = field(default_factory=dict)
     answers: list[tuple[bool, str, str]] = field(default_factory=list)  # correct, text, explanation
     body: str = ""
 
@@ -104,7 +109,29 @@ class FormatError(Exception):
     pass
 
 
-def parse_frontmatter(text: str) -> tuple[dict[str, str | list[str]], str]:
+def parse_documentation(lines: list[str], i: int) -> tuple[list[dict[str, str]], int]:
+    """Read `  - title: "…"` + `    url: "…"` pairs starting at lines[i]; return the entries and the next index."""
+    entries: list[dict[str, str]] = []
+    while i < len(lines) and lines[i].startswith("  "):
+        n = len(entries) + 1
+        tm = re.fullmatch(r'  - title: "([^"]*)"', lines[i])
+        if not tm:
+            raise FormatError(
+                f"line {i + 2}: documentation entry {n} must start with a title line, then a url line:\n{DOC_EXAMPLE}\n"
+                f"got: {lines[i]!r}"
+            )
+        um = re.fullmatch(r'    url: "([^"]*)"', lines[i + 1]) if i + 1 < len(lines) else None
+        if not um:
+            raise FormatError(
+                f"line {i + 3}: documentation entry {n} needs a url line right under its title "
+                f'(4 spaces, then url: "https://learn.microsoft.com/...")'
+            )
+        entries.append({"title": tm.group(1), "url": um.group(1)})
+        i += 2
+    return entries, i
+
+
+def parse_frontmatter(text: str) -> tuple[dict[str, str | list], str]:
     if not text.startswith("---\n"):
         raise FormatError("file must start with a '---' frontmatter line")
     end = text.find("\n---\n", 4)
@@ -112,7 +139,7 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str | list[str]], str]:
         raise FormatError("frontmatter is not closed by a '---' line")
     lines = text[4:end].split("\n")
     body = text[end + 5 :]
-    meta: dict[str, str | list[str]] = {}
+    meta: dict[str, str | list] = {}
     i = 0
     while i < len(lines):
         line = lines[i]
@@ -121,8 +148,16 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str | list[str]], str]:
             key, value = m.groups()
             if '"' in value.replace('\\"', ""):
                 raise FormatError(f"line {i + 2}: unescaped quote in {key}")
+            if key == "documentation":
+                raise FormatError(
+                    f"line {i + 2}: documentation is a list of title + url entries, not a single URL:\n"
+                    f"documentation:\n{DOC_EXAMPLE}"
+                )
             meta[key] = value.replace('\\"', '"')
             i += 1
+            continue
+        if line == "documentation:":
+            meta["documentation"], i = parse_documentation(lines, i + 1)
             continue
         m = re.fullmatch(r"([a-z_]+):", line)
         if m:
@@ -184,6 +219,38 @@ def domain_of(cert: str, skill_area: str) -> str | None:
     return None
 
 
+def check_documentation(docs: list) -> list[str]:
+    errs: list[str] = []
+    if len(docs) > MAX_DOC_LINKS:
+        errs.append(f"documentation has {len(docs)} links, at most {MAX_DOC_LINKS}: keep the pages that back the answer")
+    urls = [d["url"] for d in docs]
+    titles = [d["title"].casefold() for d in docs]
+    if len(set(urls)) != len(urls):
+        errs.append("documentation lists the same link twice")
+    if len(set(titles)) != len(titles):
+        errs.append("documentation uses the same title twice: each title should say what that page is about")
+    for n, d in enumerate(docs, 1):
+        title, url = d["title"], d["url"]
+        if not url.startswith(LEARN_PREFIX):
+            errs.append(f"documentation must be a {LEARN_PREFIX} URL: {url}")
+        where = f"documentation[{n}].title {title!r}"
+        if len(title) > DOC_TITLE_MAX:
+            errs.append(f"{where} is {len(title)} characters; keep it to {DOC_TITLE_MAX} (e.g. \"Share-level permissions\")")
+        elif len(title.strip()) < DOC_TITLE_MIN:
+            errs.append(f"{where} is empty or too short: name the page's topic in a few words")
+        if title != title.strip() or "  " in title:
+            errs.append(f"{where} has extra spaces")
+        if title.endswith("."):
+            errs.append(f"{where} ends with a period; titles are labels, not sentences")
+        if re.search(r"[\[\]`*_<>#]", title):
+            errs.append(f"{where} contains Markdown or HTML; use plain text")
+        if DOC_TITLE_FILLER.search(title):
+            errs.append(f"{where} repeats filler (\"docs\", \"Microsoft Learn\", \" - Product\"): name only the topic")
+        if title[:1].islower():
+            errs.append(f"{where} should start with a capital letter (sentence case)")
+    return errs
+
+
 def check(q: Question) -> list[str]:
     errs: list[str] = []
     m = q.meta
@@ -198,15 +265,7 @@ def check(q: Question) -> list[str]:
             errs.append(f"{key} must be a single value, not a list")
     if errs:
         return errs
-    doc = m.get("documentation", "")
-    docs = doc if isinstance(doc, list) else [doc] if doc else []
-    if len(docs) > MAX_DOC_LINKS:
-        errs.append(f"documentation has {len(docs)} links, at most {MAX_DOC_LINKS}")
-    if len(set(docs)) != len(docs):
-        errs.append("documentation lists the same link twice")
-    for url in docs:
-        if not url.startswith(LEARN_PREFIX):
-            errs.append(f"documentation must be a {LEARN_PREFIX} URL: {url}")
+    errs += check_documentation(m.get("documentation", []))
     if m.get("skill_area") and domain_of(q.cert, m["skill_area"]) is None:
         errs.append(f"unknown skill_area {m['skill_area']!r} for {q.cert}")
     if m.get("archetype") and m["archetype"] not in ARCHETYPES:

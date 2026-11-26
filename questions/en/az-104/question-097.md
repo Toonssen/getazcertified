@@ -4,8 +4,10 @@ question: |-
 
   To which vaults can you back up the blob containers in stmedia07 by using Azure Backup?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
-  - "https://learn.microsoft.com/en-us/azure/backup/backup-overview"
+  - title: "Backup vaults overview"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
+  - title: "What is Azure Backup?"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-overview"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

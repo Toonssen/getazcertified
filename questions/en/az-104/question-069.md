@@ -6,8 +6,10 @@ question: |-
 
   Which container groups can you deploy to VNet-Ops?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-vnet-plan-design-arm"
+  - title: "Container Instances in a virtual network"
+    url: "https://learn.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts"
+  - title: "Plan Azure virtual networks"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-vnet-plan-design-arm"
 skill_area: "containers"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

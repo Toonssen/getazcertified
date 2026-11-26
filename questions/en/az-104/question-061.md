@@ -5,7 +5,9 @@ question: |-
   You plan to create an Azure Container Apps environment that uses the default workload profiles environment type. The environment must use a new, dedicated subnet in an existing virtual network, and the subnet must be the smallest size that is supported.
 
   In which virtual networks can you create the subnet?
-documentation: "https://learn.microsoft.com/en-us/azure/container-apps/networking"
+documentation:
+  - title: "Container Apps networking"
+    url: "https://learn.microsoft.com/en-us/azure/container-apps/networking"
 skill_area: "containers"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

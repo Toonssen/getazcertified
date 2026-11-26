@@ -6,8 +6,10 @@ question: |-
 
   "On May 10, inv-01.pdf can be read without delay."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
-  - "https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview"
+  - title: "Lifecycle management overview"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
+  - title: "Blob rehydration from the archive tier"
+    url: "https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

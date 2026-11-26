@@ -6,8 +6,10 @@ question: |-
 
   What must be deployed to each VM, and what defines what is collected?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-enable"
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-migration"
+  - title: "Enable VM insights"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/vm/vminsights-enable"
+  - title: "Migrate from the Log Analytics agent"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-migration"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

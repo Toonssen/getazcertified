@@ -12,8 +12,10 @@ question: |-
 
   Does this meet the goal?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-custom-probe-overview"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview"
+  - title: "Load Balancer health probes"
+    url: "https://learn.microsoft.com/en-us/azure/load-balancer/load-balancer-custom-probe-overview"
+  - title: "Network security groups"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview"
 skill_area: "name-resolution-load-balancing"
 study_guide: "2026-04-17"
 archetype: "goal-solution"

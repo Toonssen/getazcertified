@@ -6,8 +6,10 @@ question: |-
 
   What should you do?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/governance/policy/overview"
-  - "https://learn.microsoft.com/en-us/azure/governance/blueprints/blueprint-retirement"
+  - title: "Azure Policy overview"
+    url: "https://learn.microsoft.com/en-us/azure/governance/policy/overview"
+  - title: "Azure Blueprints retirement"
+    url: "https://learn.microsoft.com/en-us/azure/governance/blueprints/blueprint-retirement"
 skill_area: "subscriptions-governance"
 study_guide: "2026-04-17"
 archetype: "best-choice"

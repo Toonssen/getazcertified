@@ -7,7 +7,9 @@ question: |-
   You need to deploy landing.bicep by using the Azure CLI.
 
   Which command should you run?
-documentation: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-to-subscription"
+documentation:
+  - title: "Bicep deployments to a subscription"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-to-subscription"
 skill_area: "arm-bicep"
 study_guide: "2026-04-17"
 archetype: "best-choice"

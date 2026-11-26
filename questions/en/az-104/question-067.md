@@ -8,8 +8,10 @@ question: |-
 
   What should you do?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits"
-  - "https://learn.microsoft.com/en-us/azure/app-service/deploy-staging-slots"
+  - title: "Subscription and service limits"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits"
+  - title: "App Service staging slots"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/deploy-staging-slots"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "best-choice"

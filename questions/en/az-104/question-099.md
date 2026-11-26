@@ -3,7 +3,9 @@ question: |-
   Scheduled backups of vm-erp2, a Windows Server VM, succeed, but backups are only crash-consistent instead of application-consistent. The vault dashboard flags vm-erp2 with a Warning in its Backup Pre-Check column.
 
   Which issue is the most likely cause?
-documentation: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-manage-windows-server"
+documentation:
+  - title: "Manage Recovery Services vaults"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-manage-windows-server"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "best-choice"

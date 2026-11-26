@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "app-orders can connect to vm-sql."
-documentation: "https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration"
+documentation:
+  - title: "App Service VNet integration"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

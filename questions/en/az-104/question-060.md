@@ -6,8 +6,10 @@ question: |-
 
   What should you create?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans"
-  - "https://learn.microsoft.com/en-us/azure/app-service/environment/overview"
+  - title: "App Service plans"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans"
+  - title: "App Service Environment overview"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/environment/overview"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "best-choice"
