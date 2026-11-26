@@ -6,7 +6,7 @@ question: |-
 
   Which App Service pricing tier should you use?
 documentation:
-  - title: "App Service Environment overview"
+  - title: "App Service Environment"
     url: "https://learn.microsoft.com/en-us/azure/app-service/environment/overview"
   - title: "App Service VNet integration"
     url: "https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration"

@@ -6,7 +6,7 @@ question: |-
 
   Which kind of policy do you need?
 documentation:
-  - title: "Back up VMs with the Enhanced policy"
+  - title: "Enhanced backup policy for VMs"
     url: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-enhanced-policy"
   - title: "Backup vaults overview"
     url: "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"

@@ -11,7 +11,7 @@ question: |-
 
   "The storage accounts are created in the West Europe region."
 documentation:
-  - title: "Deploy multiple resource instances"
+  - title: "Deploy resource copies"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
   - title: "Template functions: resources"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource"

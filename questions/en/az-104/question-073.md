@@ -6,7 +6,7 @@ question: |-
 
   Which resources can you associate with fw-hub?
 documentation:
-  - title: "Public IP addresses with Azure Firewall"
+  - title: "Public IPs on Azure Firewall"
     url: "https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/configure-public-ip-firewall"
   - title: "Public IP addresses in Azure"
     url: "https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses"

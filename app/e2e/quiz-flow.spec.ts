@@ -21,8 +21,7 @@ test.describe("quiz flow", () => {
 
     // At least 2 answer options
     const options = answerGroup.getByRole("radio").or(answerGroup.getByRole("checkbox"));
-    await expect(options).toHaveCount(await options.count());
-    expect(await options.count()).toBeGreaterThanOrEqual(2);
+    await expect(options.nth(1)).toBeVisible();
   });
 
   test("docs links sit in one menu, each with a title", async ({ page }) => {
@@ -30,8 +29,8 @@ test.describe("quiz flow", () => {
     await expect(trigger).toHaveCount(1);
     await trigger.click();
     const items = page.getByRole("menuitem");
-    await expect(items.first()).toBeVisible(); // count() doesn't wait for the menu to open
-    const n = await items.count();
+    await expect(items.first()).toBeVisible();
+    const n = await items.count(); // lint-ok: count (the menu is open, see above)
     expect(n).toBeGreaterThanOrEqual(1);
     expect(n).toBeLessThanOrEqual(3);
     for (let i = 0; i < n; i++) {
@@ -100,7 +99,8 @@ test.describe("quiz flow", () => {
       const radios = answerGroup.getByRole("radio");
       const checkboxes = answerGroup.getByRole("checkbox");
 
-      if (await checkboxes.count() > 0) {
+      await expect(radios.or(checkboxes).first()).toBeVisible();
+      if (await checkboxes.count() > 0) { // lint-ok: count (answers are visible, see above)
         await checkboxes.first().click();
       } else {
         await radios.first().click();

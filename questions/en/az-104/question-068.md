@@ -6,7 +6,7 @@ question: |-
 
   To which subnets can you deploy the container group?
 documentation:
-  - title: "Container Instances in a virtual network"
+  - title: "Container Instances in a VNet"
     url: "https://learn.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts"
 skill_area: "containers"
 study_guide: "2026-04-17"

@@ -63,9 +63,9 @@ menu above the question, by their title. Write each entry as two lines: the titl
 
 ```yaml
 documentation:
-  - title: "Share-level permissions for Azure Files"
+  - title: "Azure Files share permissions"
     url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
-  - title: "Azure Files identity-based auth"
+  - title: "Azure Files identity auth"
     url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
 ```
 
@@ -77,7 +77,11 @@ documentation:
   - Start from the page's own heading and shorten it; drop the product suffix Learn adds (`"... - Azure Monitor"`).
   - Don't add words the menu already says: no "docs", "documentation" or "Microsoft Learn".
   - No period at the end, no Markdown, no quotes.
-  - The same page gets the same title in every question (search the folder for the URL before inventing a new one).
+  - **Main page: at most 30 characters** when a question lists two or three pages. The first entry shares its menu
+    line with a "Main page" tag; a longer title wraps on phones. With one page there's no tag and 40 applies.
+  - The same page gets the same title in every question: search the folder for the URL before inventing one. The
+    checker fails on a second title for a page and names the file that has the first one. So a main-page title (≤ 30)
+    is that page's title everywhere.
 - Two entries in one question can't share a URL or a title.
 
 The checker tells you what to fix, for example
@@ -104,7 +108,7 @@ AZ-104 skill areas, by functional group (weights from the study guide):
 
 ## Rules (enforced by `scripts/check_questions.py`)
 
-- All required keys are present, the values come from the closed sets above, and `documentation` holds one to three `title` + `url` entries with distinct Learn URLs and titles of at most 40 characters (see [Documentation links](#documentation-links)).
+- All required keys are present, the values come from the closed sets above, and `documentation` holds one to three `title` + `url` entries with distinct Learn URLs and titles of at most 40 characters (30 for the main page of a multi-link question), one title per page across all questions (see [Documentation links](#documentation-links)).
 - There are at least 2 answers and at least one correct, with no duplicates, and every answer has an explanation.
 - "Which two/three…" matches the number of correct answers, and multi-select always says how many.
 - `exhibit-statement` and `goal-solution` answers are exactly `Yes` and `No`. `exhibit-*` questions have an exhibit block.

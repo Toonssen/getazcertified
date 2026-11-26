@@ -8,7 +8,7 @@ question: |-
 
   Which value should you use for <action>?
 documentation:
-  - title: "Lifecycle management policy structure"
+  - title: "Lifecycle policy structure"
     url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-policy-structure"
   - title: "Blob access tiers"
     url: "https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview"

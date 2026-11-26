@@ -9,6 +9,7 @@ export default defineConfig({
   },
   test: {
     include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ["./vitest.setup.ts"],
     exclude: ["src/lib/__tests__/cross-locale.test.ts", "node_modules"],
   },
 });

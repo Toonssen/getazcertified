@@ -8,7 +8,7 @@ question: |-
 
   What should you do?
 documentation:
-  - title: "Subscription and service limits"
+  - title: "Azure subscription limits"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits"
   - title: "App Service staging slots"
     url: "https://learn.microsoft.com/en-us/azure/app-service/deploy-staging-slots"

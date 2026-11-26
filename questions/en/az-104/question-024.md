@@ -8,7 +8,7 @@ question: |-
 
   "After the move, vm1 runs in West Europe."
 documentation:
-  - title: "Move resources (group or subscription)"
+  - title: "Move resources to a new group"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/move-resource-group-and-subscription"
   - title: "What is Azure Resource Mover?"
     url: "https://learn.microsoft.com/en-us/azure/resource-mover/overview"

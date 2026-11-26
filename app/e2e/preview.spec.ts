@@ -47,7 +47,8 @@ test("AZ-104 practice test runs to a score", async ({ page }) => {
 
   for (let i = 0; i < 3; i++) {
     const checkboxes = group().getByRole("checkbox");
-    if ((await checkboxes.count()) > 0) await checkboxes.first().click();
+    await expect(checkboxes.or(group().getByRole("radio")).first()).toBeVisible();
+    if ((await checkboxes.count()) > 0) await checkboxes.first().click(); // lint-ok: count (answers are visible)
     else await group().getByRole("radio").first().click();
     if (i < 2) {
       await page.getByRole("button", { name: "Next question", exact: true }).click();

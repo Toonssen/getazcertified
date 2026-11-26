@@ -87,6 +87,7 @@ LEARN_PREFIX = "https://learn.microsoft.com/"
 MAX_DOC_LINKS = 3
 DOC_TITLE_MIN = 3
 DOC_TITLE_MAX = 40  # fits one line of the "Learn more in the docs" menu, also on a phone
+DOC_MAIN_TITLE_MAX = 30  # the main page shares its menu line with the "Main page" tag (only shown with 2+ links)
 DOC_EXAMPLE = '  - title: "Share-level permissions"\n    url: "https://learn.microsoft.com/en-us/azure/..."'
 # Words that only repeat what the menu already says, or leftovers of a Learn page title ("... - Azure Monitor").
 DOC_TITLE_FILLER = re.compile(r"microsoft learn|\bdocs?\b|\bdocumentation\b|\s-\s|\|", re.IGNORECASE)
@@ -234,7 +235,13 @@ def check_documentation(docs: list) -> list[str]:
         if not url.startswith(LEARN_PREFIX):
             errs.append(f"documentation must be a {LEARN_PREFIX} URL: {url}")
         where = f"documentation[{n}].title {title!r}"
-        if len(title) > DOC_TITLE_MAX:
+        if n == 1 and len(docs) > 1 and len(title) > DOC_MAIN_TITLE_MAX:
+            errs.append(
+                f"{where} is {len(title)} characters; the main page shares its line with the \"Main page\" tag, "
+                f"keep it to {DOC_MAIN_TITLE_MAX} (e.g. \"Azure Files share permissions\"). The same page keeps "
+                f"that title in every question"
+            )
+        elif len(title) > DOC_TITLE_MAX:
             errs.append(f"{where} is {len(title)} characters; keep it to {DOC_TITLE_MAX} (e.g. \"Share-level permissions\")")
         elif len(title.strip()) < DOC_TITLE_MIN:
             errs.append(f"{where} is empty or too short: name the page's topic in a few words")
@@ -248,6 +255,31 @@ def check_documentation(docs: list) -> list[str]:
             errs.append(f"{where} repeats filler (\"docs\", \"Microsoft Learn\", \" - Product\"): name only the topic")
         if title[:1].islower():
             errs.append(f"{where} should start with a capital letter (sentence case)")
+    return errs
+
+
+def rel(path: Path) -> Path:
+    try:
+        return path.relative_to(ROOT)
+    except ValueError:
+        return path
+
+
+def check_doc_titles(questions: list[Question], report: set[Path] | None = None) -> list[str]:
+    """One page, one title: every question that links a URL uses the same title for it (first one seen wins)."""
+    seen: dict[str, tuple[str, Path]] = {}
+    errs: list[str] = []
+    for q in sorted(questions, key=lambda q: str(q.path)):
+        docs = q.meta.get("documentation", [])
+        for n, d in enumerate(docs if isinstance(docs, list) else [], 1):
+            if not isinstance(d, dict):
+                continue
+            first = seen.setdefault(d["url"], (d["title"], q.path))
+            if d["title"] != first[0] and (report is None or q.path in report):
+                errs.append(
+                    f"{rel(q.path)}: documentation[{n}].title {d['title']!r} differs from "
+                    f"{rel(first[1])}, which calls this page {first[0]!r}; use one title per page"
+                )
     return errs
 
 
@@ -366,6 +398,13 @@ def find_files(paths: list[str]) -> list[Path]:
     return sorted(QUESTIONS.glob("*/*/question-*.md"))
 
 
+def load_quiet(path: Path) -> Question | None:
+    try:
+        return load(path)
+    except FormatError:
+        return None
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
     ap.add_argument("files", nargs="*", help="question files (default: all)")
@@ -386,6 +425,12 @@ def main(argv: list[str] | None = None) -> int:
             continue  # rules apply to certs with a study guide; others are parse-checked only
         for err in check(q):
             problems.append(f"{path.relative_to(ROOT)}: {err}")
+    # One title per page across all questions, also when only some files are checked.
+    everyone = questions if not args.files else [load_quiet(p) for p in find_files([])]
+    problems += check_doc_titles(
+        [q for q in everyone if q is not None and q.cert in SKILL_AREAS],
+        report=None if not args.files else {q.path for q in questions},
+    )
     if not args.files:
         problems += check_weights([q for q in questions if q.cert in SKILL_AREAS])
     if args.links:

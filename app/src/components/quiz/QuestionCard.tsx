@@ -50,13 +50,13 @@ function DocsMenu({ docs, label, mainLabel }: { docs: DocLink[]; label: string; 
           <DropdownMenuItem
             key={doc.url}
             render={<a href={doc.url} target="_blank" rel="noopener noreferrer" />}
-            className="cursor-pointer gap-2.5 px-2.5 py-2 text-[13px] font-medium"
+            className="cursor-pointer gap-1.5 px-2 py-2 text-[13px] font-medium"
             title={doc.url}
           >
             <BookOpen className="size-3.5 text-primary" />
             <span className="flex-1 min-w-0">{doc.title}</span>
             {i === 0 && docs.length > 1 && mainLabel && (
-              <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">{mainLabel}</span>
+              <span className="shrink-0 text-[10px] font-semibold uppercase text-muted-foreground">{mainLabel}</span>
             )}
             <ExternalLink className="size-3 text-muted-foreground" aria-hidden="true" />
           </DropdownMenuItem>

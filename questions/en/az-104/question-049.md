@@ -11,7 +11,7 @@ question: |-
 
   "The first storage account that the deployment creates is named stdiag01."
 documentation:
-  - title: "Deploy multiple resource instances"
+  - title: "Deploy resource copies"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
 skill_area: "arm-bicep"
 study_guide: "2026-04-17"

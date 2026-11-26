@@ -5,12 +5,13 @@ async function selectAnswers(page: import("@playwright/test").Page) {
   const radios = page.getByRole("radio");
   const checkboxes = page.getByRole("checkbox");
 
-  if ((await radios.count()) > 0) {
+  await expect(radios.or(checkboxes).first()).toBeVisible();
+  if ((await radios.count()) > 0) { // lint-ok: count (answers are visible, see above)
     // Single-select: pick the first radio
     await radios.first().click();
   } else {
     // Multi-select: click all checkboxes to meet the required count
-    const count = await checkboxes.count();
+    const count = await checkboxes.count(); // lint-ok: count (answers are visible)
     for (let i = 0; i < count; i++) {
       await checkboxes.nth(i).click();
     }

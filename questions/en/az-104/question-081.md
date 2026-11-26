@@ -6,7 +6,7 @@ question: |-
 
   What should you create first?
 documentation:
-  - title: "Deploy Azure Firewall in the portal"
+  - title: "Deploy Azure Firewall (portal)"
     url: "https://learn.microsoft.com/en-us/azure/firewall/tutorial-firewall-deploy-portal"
   - title: "Virtual network traffic routing"
     url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-networks-udr-overview"
