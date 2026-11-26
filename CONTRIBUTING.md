@@ -12,6 +12,10 @@ backed by Microsoft Learn. You don't need to install anything: everything below 
 | Add a whole certification | [Propose a new certification](#propose-a-new-certification) | an issue first |
 | Report a website bug | [Site bug](https://github.com/Toonssen/getazcertified/issues/new?template=site-bug.yml) | 2 min |
 
+**New here?** Pick a [good first issue](https://github.com/Toonssen/getazcertified/labels/good%20first%20issue): each
+one is a topic that needs a question, with the skill area and a Learn page to start from. Comment "I'd like to take
+this" so nobody else starts on it at the same time.
+
 ## The rules (short)
 
 1. **Original only.** Write your own scenario from the Microsoft Learn docs and the official study guide. Never copy or
@@ -63,8 +67,9 @@ archetype: "best-choice"
 
 ## Improve or reword a question
 
-Found a clearer way to say it, an outdated fact or a weak distractor? Open the question's file (the **Report** form on
-the site links it), click the pencil, edit in place and propose the change.
+Found a clearer way to say it, an outdated fact or a weak distractor? Click **Improve** on the question in the
+[question browser](https://getazcertified.com/en/questions/az-104): it opens the file in GitHub's editor. Edit in place
+and propose the change.
 
 - Keep the file name: it's the question's id, and people's progress is tied to it.
 - Explanations must still follow from the cited pages; add or swap a Learn link if the facts come from elsewhere.
@@ -90,7 +95,8 @@ the site links it), click the pencil, edit in place and propose the change.
   to fix and the next free file name. Fix them by editing the file in your pull request; the checks run again.
 - The checks cover the format, the rules above, the Learn links (they must load) and spelling (add real Azure terms to
   [`cspell.json`](cspell.json)).
-- A maintainer then reviews the **content**: is it correct, original, clear and fair? Expect a reply within a week.
+- A maintainer then reviews the **content**: is it correct, original, clear and fair? Expect a first reply within 3
+  days and a decision within a week ([MAINTAINING.md](MAINTAINING.md) has the review checklist).
 
 Want to run the checks yourself? `python3 scripts/check_questions.py` (Python 3 only, no packages).
 

@@ -25,6 +25,8 @@ Public repo behind **getazcertified.com**: the landing page (`site/`) plus the *
 - **Deploy**: job `deploy` after all checks, on main only → environment `production` (required reviewer approves each
   run, no admin bypass) → Azure OIDC → Key Vault → `wrangler pages deploy dist` to Pages project `getazcertified`.
   GitHub holds identifiers only (repo variables), **never secrets**.
+- **Contributors**: be kind and quick (targets, review checklist and reply templates in `MAINTAINING.md`); test any
+  contributor-facing change as ToonssenTest (dev repo `infra/contributor-flow-test.py`).
 - Run the dev repo's `infra/audit-prod-repo.sh` **before** merging any workflow or settings change here.
 - **main** is guarded by a ruleset with no bypass: PR only, signed commits, linear history, squash only, required
   checks (`check`, `questions`, `unit`, `build`, `e2e`, CodeQL). Commits are signed with SSH (`gpg.format ssh`).
