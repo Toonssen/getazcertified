@@ -5,6 +5,9 @@ Public repo behind **getazcertified.com**: the landing page (`site/`) plus the *
 
 - **app/ and questions/ are release snapshots** from the development repo, arriving as PRs titled "Release dev@<sha>"
   (made by a release script that runs a leak gate first). Don't edit them here; change them upstream and release again.
+  `check` enforces it: a PR touching `app/`, `questions/`, `scripts/check_questions.py`, `cspell.json` or `.node-version`
+  must come from a `release/*` branch of this repo. Dependabot opens no npm PRs here (`open-pull-requests-limit: 0`):
+  dependency bumps happen upstream and arrive by release.
   This repo owns `.github/`, `site/`, `scripts/check_site.py`, `scripts/assemble.py`, `scripts/serve.py` and the docs.
 - **CI** (`.github/workflows/ci.yml`): `check` (landing page + actionlint), `questions`, `unit`, `build` (Next export with
   `NEXT_PUBLIC_SITE_MODE=preview`, then `scripts/assemble.py`: landing page at `/`, challenges removed, `_headers` with a

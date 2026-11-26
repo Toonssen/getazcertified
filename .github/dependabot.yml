@@ -5,11 +5,13 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+  # app/ is a release snapshot of the dev repo: version bumps are made there and arrive by release. No npm PRs here
+  # (0 = version updates off); Dependabot alerts and security-update PRs still flag issues, fix them in dev too.
   - package-ecosystem: npm
     directory: /app
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 0
     groups:
       npm-minor-and-patch:
         update-types: [ minor, patch ]
