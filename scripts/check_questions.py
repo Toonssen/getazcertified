@@ -487,14 +487,18 @@ def check_numbering(everyone: list[Question], report: set[Path] | None = None) -
     return errs
 
 
-def check_readme_tables(readme: Path | None = None) -> list[str]:
-    """questions/README.md repeats each cert's domains as a table for readers; it must match questions/certs/*.json."""
+def check_readme_tables(readme: Path | None = None, certs: dict | None = None) -> list[str]:
+    """questions/README.md repeats each live cert's domains as a table for readers; it must match questions/certs/*.json.
+
+    Draft certs are left out, so proposing one needs no README edit; the maintainer adds the table when it goes live."""
     readme = readme or QUESTIONS / "README.md"
     if not readme.exists():
         return []
     rows = [l for l in readme.read_text(encoding="utf-8").split("\n") if l.startswith("| ")]
     errs = []
-    for cid, c in CERTS.items():
+    for cid, c in (certs if certs is not None else CERTS).items():
+        if c.get("status") != "live":
+            continue
         for d in c["domains"]:
             row = next((r for r in rows if r.startswith(f"| {d['name']} |")), None)
             want = f"{d['weight'][0]}–{d['weight'][1]}%"

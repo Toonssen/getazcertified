@@ -25,7 +25,7 @@ from pathlib import Path
 MARKER = "<!-- pr-feedback -->"
 API = "https://api.github.com"
 MAX_ITEMS = 40
-MAX_ITEM_CHARS = 300
+MAX_ITEM_CHARS = 600
 MAX_FILE_BYTES = 512 * 1024
 FIRST_TIME = {"FIRST_TIME_CONTRIBUTOR", "FIRST_TIMER", "NONE"}
 CERT_ID_RE = re.compile(r"[a-z]{2,4}-\d{3}")
@@ -79,7 +79,16 @@ def capped(items: list[str]) -> list[str]:
     return out
 
 
-def render(report: dict | None, spelling: list[str], conclusion: str, first_time: bool, run_url: str) -> str:
+def render(
+    report: dict | None,
+    spelling: list[str],
+    conclusion: str,
+    first_time: bool,
+    run_url: str,
+    certs: set[str] | None = None,
+    other_failed: list[str] | None = None,
+) -> str:
+    """The comment. certs: show next numbers only for these (the PR's); other_failed: failed jobs besides `questions`."""
     parts = [MARKER]
     if first_time:
         parts.append(
@@ -98,7 +107,7 @@ def render(report: dict | None, spelling: list[str], conclusion: str, first_time
         warnings = [str(w) for w in report.get("warnings", [])[:20]]
         nexts = report.get("next_numbers", {}) if isinstance(report.get("next_numbers"), dict) else {}
 
-    if report is None:
+    if report is None and not other_failed:
         parts.append(f"### ⚠️ The question checks didn't finish\nSee [the checks]({run_url}) for what went wrong.")
     elif problems or spelling:
         parts.append("### ❌ Some things to fix")
@@ -110,7 +119,14 @@ def render(report: dict | None, spelling: list[str], conclusion: str, first_time
                 + fenced(capped(spelling))
             )
         parts.append("Edit the file in this pull request to fix them; the checks run again and this comment updates.")
-    elif conclusion != "success":
+    if other_failed:
+        hint = (
+            " `check` fails when a pull request from a fork changes files outside the questions and their docs; "
+            "for those please open an issue."
+            if "check" in other_failed else ""
+        )
+        parts.append(f"Also failed: {', '.join(f'`{j}`' for j in other_failed)} (see [the checks]({run_url})).{hint}")
+    elif report is not None and not (problems or spelling) and conclusion != "success":
         parts.append(f"### ⚠️ The question rules pass, but another check failed\nSee [the checks]({run_url}).")
     else:
         parts.append("### ✅ All checks passed\nA maintainer will review the content (correct, original, clear, fair).")
@@ -119,6 +135,7 @@ def render(report: dict | None, spelling: list[str], conclusion: str, first_time
     good = {
         c: n for c, n in nexts.items()
         if isinstance(c, str) and CERT_ID_RE.fullmatch(c) and isinstance(n, int) and 0 < n < 1000
+        and (not certs or c in certs)
     }
     if good:
         parts.append(
@@ -201,12 +218,23 @@ def run(gh, event: dict, artifact: Path, log=print) -> str:
         except ValueError:
             report = None
     spelling = [l for l in (read_small(artifact / "spelling.txt") or "").splitlines() if l.strip()]
+    certs = {m.group(1) for f in files if (m := re.match(r"questions/(?:en|certs)/([a-z]{2,4}-\d{3})", f.get("filename", "")))}
+    other_failed: list[str] = []
+    run_id = wr.get("id")
+    if isinstance(run_id, int):
+        jobs = gh.call("GET", f"/actions/runs/{run_id}/jobs?per_page=50") or {}
+        other_failed = sorted(
+            clean(j.get("name", "?")) for j in jobs.get("jobs", [])
+            if j.get("conclusion") == "failure" and j.get("name") != "questions"
+        )
     body = render(
         report,
         spelling,
         str(wr.get("conclusion")),
         pr.get("author_association") in FIRST_TIME,
         str(wr.get("html_url", "")),
+        certs,
+        other_failed,
     )
     if mine:
         gh.call("PATCH", f"/issues/comments/{mine['id']}", {"body": body})

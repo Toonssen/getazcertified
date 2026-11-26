@@ -364,6 +364,12 @@ class ReadmeTableTests(unittest.TestCase):
     def test_real_readme_matches_registry(self):
         self.assertEqual(cq.check_readme_tables(), [])
 
+    def test_draft_cert_needs_no_table(self):
+        draft = {"az-900": {"status": "draft", "domains": [{"name": "Describe cloud concepts", "weight": [25, 30], "skill_areas": ["cloud"]}]}}
+        self.assertEqual(cq.check_readme_tables(certs=draft), [])
+        live = {"az-900": dict(draft["az-900"], status="live")}
+        self.assertEqual(len(cq.check_readme_tables(certs=live)), 1)
+
     def test_drift_is_reported(self):
         with tempfile.TemporaryDirectory() as tmp:
             readme = Path(tmp) / "README.md"
