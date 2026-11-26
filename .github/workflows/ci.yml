@@ -40,6 +40,23 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
+      - name: Release-only paths (app/, questions/ change only through release PRs from the dev repo)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          set -euo pipefail
+          changed=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- app questions scripts/check_questions.py cspell.json .node-version)
+          if [[ -n "$changed" ]] && { [[ "$HEAD_REF" != release/* ]] || [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; }; then
+            echo "::error::These paths are release snapshots of the dev repo and change only through a release PR:"
+            echo "$changed" | head -20
+            echo "Make the change in Toonssen/getazcertified-dev, merge it there, then run infra/release-to-prod.sh."
+            exit 1
+          fi
+          echo "release-only paths: ok"
       - name: Landing page checks (references, no third-party loads, no scripts, security headers)
         run: python3 scripts/check_site.py
       - name: actionlint (pinned release, checksum verified)
