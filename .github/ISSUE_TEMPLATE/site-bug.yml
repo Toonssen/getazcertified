@@ -1,0 +1,23 @@
+name: Website bug or idea
+description: Something on getazcertified.com doesn't work, or could work better.
+title: "[site] "
+labels: ["site"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, or what's your idea?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to see it (for bugs)
+      placeholder: |
+        1. Open https://getazcertified.com/en/practice-tests/az-104
+        2. ...
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Firefox 140 on Windows 11 / Safari on iPhone

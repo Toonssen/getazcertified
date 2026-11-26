@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issue
+    url: https://github.com/Toonssen/getazcertified/security/advisories/new
+    about: Please report security problems privately (see SECURITY.md), not as an issue.
+  - name: How to contribute
+    url: https://github.com/Toonssen/getazcertified/blob/main/CONTRIBUTING.md
+    about: Write or improve questions straight from your browser.

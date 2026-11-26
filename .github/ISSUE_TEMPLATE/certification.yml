@@ -1,0 +1,32 @@
+name: Propose a certification
+description: Add a new Azure certification to getazcertified. Please agree on it here before writing questions.
+title: "[certification] "
+labels: ["certification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        New certifications start as **draft** (not shown on the site) and go live with at least 20 questions spread
+        over the exam's skill groups. How it works: [CONTRIBUTING.md › Propose a new certification](https://github.com/Toonssen/getazcertified/blob/main/CONTRIBUTING.md#propose-a-new-certification).
+  - type: input
+    id: exam
+    attributes:
+      label: Exam code and name
+      placeholder: SC-500 Microsoft Cybersecurity Architect
+    validations:
+      required: true
+  - type: input
+    id: study-guide
+    attributes:
+      label: Official study guide
+      description: The learn.microsoft.com study guide with the skills measured.
+      placeholder: https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/...
+    validations:
+      required: true
+  - type: textarea
+    id: plan
+    attributes:
+      label: Your plan
+      description: Will you write questions? Roughly how many, and for which skill groups?
+    validations:
+      required: true
