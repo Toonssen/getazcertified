@@ -24,7 +24,7 @@ import { renderInlineMarkdown } from "@/lib/render-inline-markdown";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { AnswerList } from "@/components/quiz/AnswerList";
 import { FeedbackAlert } from "@/components/quiz/FeedbackAlert";
-import { IS_PREVIEW, SITE_REPO_URL } from "@/lib/site";
+import { questionReportUrl } from "@/lib/report";
 
 interface QuestionBrowserProps {
   questions: Question[];
@@ -308,7 +308,7 @@ export function QuestionBrowser({ questions }: QuestionBrowserProps) {
       <QuestionCard
         headerLabel={tQ("questionOf", { current: currentIndex + 1, total: orderedQuestions.length })}
         documentation={currentQuestion.documentation}
-        reportHref={IS_PREVIEW ? undefined : `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert: currentQuestion.cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${currentQuestion.cert}/question-${currentQuestion.id.replace(`${currentQuestion.cert}-`, "")}.md)` }))}&labels=question-issue`}
+        reportHref={questionReportUrl(currentQuestion.cert, currentQuestion.id, tQ("reportIssueTitle", { cert: currentQuestion.cert, questionId: currentQuestion.id }))}
         learnMoreLabel={tQ("learnMore")}
         mainDocLabel={tQ("mainDoc")}
         reportLabel={tQ("report")}

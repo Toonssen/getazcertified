@@ -14,6 +14,8 @@ covered separately by app/src/lib/__tests__/questions.test.ts.
 from __future__ import annotations
 
 import argparse
+import json
+import os
 import re
 import sys
 import time
@@ -25,49 +27,85 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 QUESTIONS = ROOT / "questions"
 
-STUDY_GUIDES = {"az-104": "2026-04-17"}
+CERTS_DIR = QUESTIONS / "certs"
+LEARN_PREFIX = "https://learn.microsoft.com/"
 
-# AZ-104 skills measured (study guide 2026-04-17): functional group -> skill areas.
-SKILL_AREAS = {
-    "az-104": {
-        "identity-governance": [
-            "entra-users-groups",
-            "access-azure-resources",
-            "subscriptions-governance",
-        ],
-        "storage": [
-            "storage-access",
-            "storage-accounts",
-            "files-blob",
-        ],
-        "compute": [
-            "arm-bicep",
-            "virtual-machines",
-            "containers",
-            "app-service",
-        ],
-        "virtual-networking": [
-            "virtual-networks",
-            "secure-vnet-access",
-            "name-resolution-load-balancing",
-        ],
-        "monitor-maintain": [
-            "monitor-resources",
-            "backup-recovery",
-        ],
-    }
-}
+# Certifications are data: one questions/certs/<cert>.json each (see CONTRIBUTING.md › Propose a new certification).
+# The app builds its catalog from the same files.
+CERT_STATUSES = ("draft", "live")
+CERT_COLORS = range(1, 9)  # palette slots --cert-1..8 in app/src/app/globals.css (the CSP forbids inline colours)
+CERT_ICONS = (  # lucide icons the app maps (app/src/lib/cert-meta.tsx); generic glyphs, never Microsoft logos
+    "server-cog", "shield-check", "network", "database", "brain", "cloud", "code", "lock",
+    "workflow", "chart-line", "key-round", "boxes",
+)
+CERT_ID_RE = re.compile(r"^[a-z]{2,4}-\d{3}$")  # exam code, e.g. az-104, sc-500
+MIN_LIVE_QUESTIONS = 20
+CERT_EXAMPLE = "questions/certs/az-104.json"
 
-# Study-guide weight ranges per functional group, in percent.
-WEIGHTS = {
-    "az-104": {
-        "identity-governance": (20, 25),
-        "storage": (15, 20),
-        "compute": (20, 25),
-        "virtual-networking": (15, 20),
-        "monitor-maintain": (10, 15),
-    }
-}
+
+def load_certs(certs_dir: Path | None = None) -> tuple[dict[str, dict], list[str]]:
+    """Read every questions/certs/*.json; return {id: cert} and the problems found (with how to fix them)."""
+    certs_dir = certs_dir or CERTS_DIR
+    certs: dict[str, dict] = {}
+    errs: list[str] = []
+    for path in sorted(certs_dir.glob("*.json")):
+        where = f"questions/certs/{path.name}"
+        try:
+            c = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as e:
+            errs.append(f"{where}: not valid JSON ({e.msg} at line {e.lineno}); compare with {CERT_EXAMPLE}")
+            continue
+        if not isinstance(c, dict):
+            errs.append(f"{where}: must be a JSON object like {CERT_EXAMPLE}")
+            continue
+        missing = [k for k in ("id", "title", "description", "status", "study_guide", "color", "icon", "domains") if k not in c]
+        if missing:
+            errs.append(f"{where}: missing {', '.join(missing)}; copy the shape of {CERT_EXAMPLE}")
+            continue
+        cid = c["id"]
+        if cid != path.stem:
+            errs.append(f"{where}: id {cid!r} must match the file name ({path.stem!r})")
+        if not isinstance(cid, str) or not CERT_ID_RE.match(cid):
+            errs.append(f"{where}: id {cid!r} must be the lowercase exam code, e.g. \"az-104\" or \"sc-500\"")
+        if c["status"] not in CERT_STATUSES:
+            errs.append(f"{where}: status must be \"draft\" (new, hidden on the site) or \"live\" (maintainers only)")
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(c["study_guide"])):
+            errs.append(f"{where}: study_guide must be the date of the official study guide's skills list, YYYY-MM-DD")
+        if c["color"] not in CERT_COLORS:
+            errs.append(f"{where}: color must be a palette slot from 1 to 8 (see app/src/app/globals.css)")
+        if c["icon"] not in CERT_ICONS:
+            errs.append(f"{where}: icon {c['icon']!r} isn't available; pick one of: {', '.join(CERT_ICONS)}")
+        if not 10 <= len(str(c["title"])) <= 60:
+            errs.append(f"{where}: title should read like \"Azure Administrator (AZ-104)\" (10-60 characters)")
+        if not 20 <= len(str(c["description"])) <= 200:
+            errs.append(f"{where}: description is one sentence about what the exam covers (20-200 characters)")
+        url = c.get("study_guide_url", "")
+        if url and not str(url).startswith(LEARN_PREFIX):
+            errs.append(f"{where}: study_guide_url must be a {LEARN_PREFIX} page")
+        domains = c["domains"] if isinstance(c["domains"], list) else []
+        if not domains:
+            errs.append(f"{where}: domains lists the study guide's skill groups, each with id, name, weight and skill_areas")
+        seen_areas: set[str] = set()
+        for n, d in enumerate(domains, 1):
+            if not isinstance(d, dict) or not {"id", "name", "weight", "skill_areas"} <= set(d):
+                errs.append(f"{where}: domains[{n}] needs id, name, weight [min, max] and skill_areas")
+                continue
+            w = d["weight"]
+            if not (isinstance(w, list) and len(w) == 2 and all(isinstance(x, int) for x in w) and 0 < w[0] <= w[1] <= 100):
+                errs.append(f"{where}: domains[{n}].weight must be [min, max] percent from the study guide, e.g. [15, 20]")
+            for area in d["skill_areas"] if isinstance(d["skill_areas"], list) else []:
+                if area in seen_areas:
+                    errs.append(f"{where}: skill area {area!r} appears in two domains")
+                seen_areas.add(area)
+        if not errs or not any(e.startswith(where) for e in errs):
+            certs[cid] = c
+    return certs, errs
+
+
+CERTS, CERT_ERRORS = load_certs()
+STUDY_GUIDES = {cid: c["study_guide"] for cid, c in CERTS.items()}
+SKILL_AREAS = {cid: {d["id"]: list(d["skill_areas"]) for d in c["domains"]} for cid, c in CERTS.items()}
+WEIGHTS = {cid: {d["id"]: tuple(d["weight"]) for d in c["domains"]} for cid, c in CERTS.items()}
 
 ARCHETYPES = {
     "best-choice",         # requirements, then "What should you use / do first?"
@@ -83,7 +121,6 @@ ARCHETYPES = {
 
 REQUIRED_KEYS = ("question", "documentation", "skill_area", "study_guide", "archetype")
 OPTIONAL_KEYS = ("series",)
-LEARN_PREFIX = "https://learn.microsoft.com/"
 MAX_DOC_LINKS = 3
 DOC_TITLE_MIN = 3
 DOC_TITLE_MAX = 40  # fits one line of the "Learn more in the docs" menu, also on a phone
@@ -299,9 +336,10 @@ def check(q: Question) -> list[str]:
         return errs
     errs += check_documentation(m.get("documentation", []))
     if m.get("skill_area") and domain_of(q.cert, m["skill_area"]) is None:
-        errs.append(f"unknown skill_area {m['skill_area']!r} for {q.cert}")
+        areas = ", ".join(a for d in SKILL_AREAS.get(q.cert, {}).values() for a in d)
+        errs.append(f"unknown skill_area {m['skill_area']!r} for {q.cert}; use one of: {areas}")
     if m.get("archetype") and m["archetype"] not in ARCHETYPES:
-        errs.append(f"unknown archetype {m['archetype']!r}")
+        errs.append(f"unknown archetype {m['archetype']!r}; use one of: {', '.join(sorted(ARCHETYPES))} (see questions/README.md)")
     expected_guide = STUDY_GUIDES.get(q.cert)
     if expected_guide and m.get("study_guide") and m["study_guide"] != expected_guide:
         errs.append(f"study_guide must be {expected_guide!r}")
@@ -405,40 +443,212 @@ def load_quiet(path: Path) -> Question | None:
         return None
 
 
+def check_certs(everyone: list[Question]) -> list[str]:
+    """Registry problems, question folders without a registry entry, and live certs that are still too small."""
+    errs = list(CERT_ERRORS)
+    counts: dict[str, int] = {}
+    for q in everyone:
+        counts[q.cert] = counts.get(q.cert, 0) + 1
+    for cert in sorted(counts):
+        if cert not in CERTS and not any(e.startswith(f"questions/certs/{cert}.json") for e in errs):
+            errs.append(
+                f"questions/certs/{cert}.json: missing; every folder under questions/<locale>/ needs a certification "
+                f"file (copy {CERT_EXAMPLE}, set status \"draft\")"
+            )
+    for cid, c in CERTS.items():
+        if c["status"] == "live" and counts.get(cid, 0) < MIN_LIVE_QUESTIONS:
+            errs.append(
+                f"questions/certs/{cid}.json: status \"live\" needs at least {MIN_LIVE_QUESTIONS} questions "
+                f"({counts.get(cid, 0)} now); keep it \"draft\" until then"
+            )
+    return errs
+
+
+def check_numbering(everyone: list[Question], report: set[Path] | None = None) -> list[str]:
+    """Question numbers per certification run 001, 002, … without gaps, so the next free number is obvious."""
+    errs: list[str] = []
+    by_cert: dict[str, list[tuple[int, Question]]] = {}
+    for q in everyone:
+        m = re.fullmatch(r"question-(\d+)", q.path.stem)
+        if m:
+            by_cert.setdefault(q.cert, []).append((int(m.group(1)), q))
+    for cert, items in by_cert.items():
+        used = {n for n, _ in items}
+        free = [n for n in range(1, len(items) + 1) if n not in used]
+        for n, q in sorted(items, key=lambda t: t[0]):
+            if n > len(items) and (report is None or q.path in report):
+                target = free.pop(0) if free else len(items) + 1
+                errs.append(
+                    f"{rel_path(q.path)}: question numbers run on without gaps; rename this file to "
+                    f"question-{target:03d}.md (the next free number)"
+                )
+            if not re.fullmatch(r"question-\d{3,}", q.path.stem):
+                errs.append(f"{rel_path(q.path)}: use three digits, e.g. question-{n:03d}.md")
+    return errs
+
+
+def check_readme_tables(readme: Path | None = None) -> list[str]:
+    """questions/README.md repeats each cert's domains as a table for readers; it must match questions/certs/*.json."""
+    readme = readme or QUESTIONS / "README.md"
+    if not readme.exists():
+        return []
+    rows = [l for l in readme.read_text(encoding="utf-8").split("\n") if l.startswith("| ")]
+    errs = []
+    for cid, c in CERTS.items():
+        for d in c["domains"]:
+            row = next((r for r in rows if r.startswith(f"| {d['name']} |")), None)
+            want = f"{d['weight'][0]}–{d['weight'][1]}%"
+            if row is None or want not in row or any(f"`{a}`" not in row for a in d["skill_areas"]):
+                errs.append(
+                    f"questions/README.md: the skill-area table row for {d['name']!r} ({cid}) must read "
+                    f"{want} and list {', '.join(d['skill_areas'])}, as in questions/certs/{cid}.json"
+                )
+    return errs
+
+
+def next_numbers(everyone: list[Question]) -> dict[str, int]:
+    """The next free question number per certification: the first gap, else one past the last."""
+    used: dict[str, set[int]] = {}
+    for q in everyone:
+        m = re.fullmatch(r"question-(\d+)", q.path.stem)
+        if m:
+            used.setdefault(q.cert, set()).add(int(m.group(1)))
+    out = {cid: 1 for cid in CERTS}
+    for cert, nums in used.items():
+        out[cert] = next(n for n in range(1, len(nums) + 2) if n not in nums)
+    return out
+
+
+def split_problem(problem: str) -> tuple[str | None, str]:
+    """'questions/en/az-104/question-001.md: msg' -> (path, msg); link errors name their files in '(in a, b)'."""
+    m = re.match(r"^((?:questions|scripts)/[^\s:]+\.(?:md|json)): (.*)$", problem, re.S)
+    if m:
+        return m.group(1), m.group(2)
+    m = re.search(r"\(in ([^,)]+)", problem)
+    return (m.group(1) if m else None), problem
+
+
+def line_for(path: str, msg: str) -> int:
+    """Best line for an annotation: the frontmatter key or documentation entry the message is about, else 1."""
+    try:
+        lines = (ROOT / path).read_text(encoding="utf-8").split("\n")
+    except OSError:
+        return 1
+    m = re.match(r"documentation\[(\d+)\]", msg)
+    if m:
+        hits = [i for i, l in enumerate(lines, 1) if l.startswith("  - title:")]
+        n = int(m.group(1))
+        return hits[n - 1] if 0 < n <= len(hits) else 1
+    m = re.match(r"line (\d+)", msg) or re.match(r"frontmatter line (\d+)", msg)
+    if m:
+        return int(m.group(1))
+    url = re.search(r"https://\S+", msg)
+    for key in ([url.group(0)] if url else []) + [
+        f"{k}:" for k in REQUIRED_KEYS + OPTIONAL_KEYS if k in msg
+    ] + (["- ["] if "answer" in msg else []):
+        for i, l in enumerate(lines, 1):
+            if key in l:
+                return i
+    return 1
+
+
+def gh_escape(text: str) -> str:
+    return text.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+
+
+def write_outputs(files: list[Path], problems: list[str], warnings: list[str], nexts: dict[str, int], report: str | None) -> None:
+    """GitHub annotations + job summary in Actions, and a JSON report for the PR feedback comment."""
+    in_actions = os.environ.get("GITHUB_ACTIONS") == "true"
+    for level, items in (("error", problems), ("warning", warnings)):
+        for p in items:
+            path, msg = split_problem(p)
+            if in_actions and path:
+                print(f"::{level} file={path},line={line_for(path, msg)},title=Question check::{gh_escape(msg)}")
+    rows = []
+    for f in files:
+        rel = str(rel_path(f))
+        mine = [split_problem(p)[1] for p in problems if split_problem(p)[0] == rel]
+        rows.append({"file": rel, "ok": not mine, "problems": mine})
+    data = {
+        "files": rows,
+        "other_problems": [p for p in problems if split_problem(p)[0] not in {r["file"] for r in rows}],
+        "warnings": warnings,
+        "next_numbers": nexts,
+    }
+    if report:
+        Path(report).write_text(json.dumps(data, indent=2), encoding="utf-8")
+    summary = os.environ.get("GITHUB_STEP_SUMMARY")
+    repo = os.environ.get("GITHUB_REPOSITORY", "Toonssen/getazcertified")
+    base = f"https://github.com/{repo}/blob/main"
+    if summary:
+        out = ["## Question checks", ""]
+        if rows:
+            out += ["| File | Result |", "|---|---|"]
+            for r in rows:
+                result = "✅ ok" if r["ok"] else "❌ " + "<br>".join(x.replace("|", "\\|") for x in r["problems"])
+                out.append(f"| `{r['file']}` | {result} |")
+        for p in data["other_problems"]:
+            out.append(f"- ❌ {p}")
+        for w in warnings:
+            out.append(f"- ⚠️ {w}")
+        out += ["", "**Next free file names:** " + ", ".join(f"`questions/en/{c}/question-{n:03d}.md`" for c, n in sorted(nexts.items())),
+                "", f"How to fix: [question guide]({base}/questions/README.md) · [contributing]({base}/CONTRIBUTING.md)"]
+        with open(summary, "a", encoding="utf-8") as fh:
+            fh.write("\n".join(out) + "\n")
+
+
+def rel_path(path: Path) -> Path:
+    try:
+        return path.resolve().relative_to(ROOT)
+    except ValueError:
+        return path
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n", 1)[0])
-    ap.add_argument("files", nargs="*", help="question files (default: all)")
+    ap.add_argument("files", nargs="*", help="question files (default: all); missing files (deleted in a PR) are skipped")
     ap.add_argument("--links", action="store_true", help="also check that every Learn link answers 200")
+    ap.add_argument("--report", metavar="PATH", help="write a JSON report (used by the PR feedback comment)")
     args = ap.parse_args(argv)
 
-    files = find_files(args.files)
+    if args.files:
+        files = [p for p in find_files(args.files) if p.exists() and re.fullmatch(r"question-\d+\.md", p.name)]
+    else:
+        files = find_files([])
     problems: list[str] = []
     questions: list[Question] = []
     for path in files:
         try:
             q = load(path)
         except FormatError as e:
-            problems.append(f"{path.relative_to(ROOT)}: {e}")
+            problems.append(f"{rel_path(path)}: {e}")
             continue
         questions.append(q)
-        if q.cert not in SKILL_AREAS:
-            continue  # rules apply to certs with a study guide; others are parse-checked only
+        if q.cert not in CERTS:
+            continue  # reported once by check_certs
         for err in check(q):
-            problems.append(f"{path.relative_to(ROOT)}: {err}")
-    # One title per page across all questions, also when only some files are checked.
-    everyone = questions if not args.files else [load_quiet(p) for p in find_files([])]
+            problems.append(f"{rel_path(path)}: {err}")
+    # Rules across questions use every file, also when only some files are checked.
+    everyone = [q for q in (questions if not args.files else [load_quiet(p) for p in find_files([])]) if q is not None]
+    problems += check_certs(everyone)
+    problems += check_readme_tables()
+    problems += check_numbering(everyone, report=None if not args.files else {q.path for q in questions})
     problems += check_doc_titles(
-        [q for q in everyone if q is not None and q.cert in SKILL_AREAS],
+        [q for q in everyone if q.cert in CERTS],
         report=None if not args.files else {q.path for q in questions},
     )
-    if not args.files:
-        problems += check_weights([q for q in questions if q.cert in SKILL_AREAS])
+    # Exam weights guide the set as a whole; a single contribution shouldn't fail on them, so they only warn.
+    warnings = check_weights([q for q in everyone if q.cert in CERTS])
     if args.links:
-        problems += check_links([q for q in questions if q.cert in SKILL_AREAS])
+        problems += check_links([q for q in questions if q.cert in CERTS])
 
+    nexts = next_numbers(everyone)
+    write_outputs(files, problems, warnings, nexts, args.report)
     for p in problems:
         print(p)
-    print(f"{len(files)} files, {len(problems)} problems")
+    for w in warnings:
+        print(f"warning: {w}")
+    print(f"{len(files)} files, {len(problems)} problems" + (f", {len(warnings)} warnings" if warnings else ""))
     return 1 if problems else 0
 
 

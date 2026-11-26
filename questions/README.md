@@ -7,8 +7,11 @@ style guide, e.g. [`docs/question-style/az-104.md`](../docs/question-style/az-10
 
 ## Files
 
-- One question per file, `questions/en/<cert>/question-NNN.md` (zero-padded: `question-042.md`).
-- Certs: `az-104`. A cert directory is picked up by the app once it's listed in `app/src/lib/questions.ts`.
+- One question per file, `questions/en/<cert>/question-NNN.md` (zero-padded: `question-042.md`). Numbers run on without
+  gaps: use the next free number (CI prints it, and tells you if a file needs renaming).
+- Each certification is described by `questions/certs/<cert>.json` (title, study-guide date, skill areas, colour,
+  icon, `draft` or `live`); the site builds its catalog from these files. Certs: `az-104`. How to add one:
+  [CONTRIBUTING.md › Propose a new certification](../CONTRIBUTING.md#propose-a-new-certification).
 
 ## Template
 
@@ -87,7 +90,8 @@ documentation:
 The checker tells you what to fix, for example
 `documentation[2].title 'Overview of the Azure Monitor alert types' is 41 characters; keep it to 40 (e.g. "Share-level permissions")`.
 
-AZ-104 skill areas, by functional group (weights from the study guide):
+The skill areas per functional group, with the study guide's weights, are in the cert's file, e.g.
+[`questions/certs/az-104.json`](certs/az-104.json) › `domains`. For AZ-104:
 
 | functional group | weight | `skill_area` |
 |---|---|---|
@@ -112,7 +116,10 @@ AZ-104 skill areas, by functional group (weights from the study guide):
 - There are at least 2 answers and at least one correct, with no duplicates, and every answer has an explanation.
 - "Which two/three…" matches the number of correct answers, and multi-select always says how many.
 - `exhibit-statement` and `goal-solution` answers are exactly `Yes` and `No`. `exhibit-*` questions have an exhibit block.
-- Once every functional group has questions, the share of each falls inside the study-guide weights.
+- Question numbers have no gaps; certification files in `questions/certs/` are valid, every question folder has one,
+  and a `live` cert has at least 20 questions.
+- Once every functional group has questions, the share of each should fall inside the study-guide weights. This
+  only **warns** (one new question can tip a percentage); maintainers balance the set.
 - With `--links`: every Learn URL in the file answers 200.
 
 ```bash
@@ -121,7 +128,8 @@ python3 scripts/check_questions.py --links    # rules + live links
 python3 -m unittest discover -s scripts       # the checker's own tests
 ```
 
-CI runs both in the `question-checks` job. Spelling is checked by cspell (`cspell.json`): add real Azure terms
+In a pull request, CI runs these on the files you changed: problems show **inline on your diff** ("Files changed"
+tab) and in a comment on the PR, with the fix and the next free file name. Spelling is checked by cspell (`cspell.json`): add real Azure terms
 there, don't misspell around it.
 
 ## Originality

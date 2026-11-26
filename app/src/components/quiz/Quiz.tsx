@@ -28,7 +28,8 @@ import { FeedbackAlert } from "@/components/quiz/FeedbackAlert";
 import { QuizResults } from "@/components/quiz/QuizResults";
 import { QuizQuestionMap } from "@/components/quiz/QuizQuestionMap";
 import { SubmitDialog } from "@/components/quiz/SubmitDialog";
-import { IS_PREVIEW, SITE_REPO_URL } from "@/lib/site";
+import { CONTRIBUTE_REPO_URL } from "@/lib/site";
+import { questionReportUrl } from "@/lib/report";
 
 interface QuizProps {
   questions: Question[];
@@ -241,7 +242,7 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
             ) : undefined
           }
           documentation={currentQuestion.documentation}
-          reportHref={IS_PREVIEW ? undefined : `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${cert}/question-${currentQuestion.id.replace(`${cert}-`, "")}.md)` }))}&labels=question-issue`}
+          reportHref={questionReportUrl(cert, currentQuestion.id, tQ("reportIssueTitle", { cert, questionId: currentQuestion.id }))}
           learnMoreLabel={tQ("learnMore")}
           mainDocLabel={tQ("mainDoc")}
           reportLabel={tQ("report")}
@@ -391,13 +392,12 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
             }}
           />
 
-          {/* Contribute CTA (not in the preview: contributions open at the full launch) */}
-          {!IS_PREVIEW && (
+          {/* Contribute CTA: contributions go to the public repo (also from the sneak peek) */}
           <Card className="bg-foreground text-card border-foreground shadow-sm">
             <CardContent className="px-4 py-3.5 flex items-center justify-between gap-3">
               <span className="text-[13px] text-card/65 leading-snug">{t("contributePrompt")}</span>
               <Button
-                render={<a href={`${SITE_REPO_URL}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener noreferrer" />}
+                render={<a href={`${CONTRIBUTE_REPO_URL}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener noreferrer" />}
                 nativeButton={false}
                 className="bg-card text-foreground hover:bg-card/90 font-bold text-[12px] px-3 py-1.5 h-auto flex-shrink-0"
               >
@@ -405,7 +405,6 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
               </Button>
             </CardContent>
           </Card>
-          )}
         </div>
       </div>
 
