@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { afterEach, describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
 import { QuestionCard, docPageTitle } from "@/components/quiz/QuestionCard";
 import { toDocLinks, type DocLink } from "@/lib/doc-links";
 
@@ -28,8 +28,6 @@ function renderCard(docs: DocLink[]) {
 }
 
 describe("QuestionCard documentation menu", () => {
-  afterEach(cleanup);
-
   it("shows one trigger, whatever the number of links, and no loose doc links", () => {
     for (const docs of [DOCS.slice(0, 1), DOCS]) {
       const { container, unmount } = renderCard(docs);

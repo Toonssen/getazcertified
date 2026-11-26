@@ -6,7 +6,7 @@ question: |-
 
   Which value should you use for <cmdlet>?
 documentation:
-  - title: "Deploy templates with PowerShell"
+  - title: "Deploy templates (PowerShell)"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-powershell"
   - title: "Template specs"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-specs"

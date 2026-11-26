@@ -8,7 +8,7 @@ question: |-
 documentation:
   - title: "App Service plans"
     url: "https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans"
-  - title: "App Service Environment overview"
+  - title: "App Service Environment"
     url: "https://learn.microsoft.com/en-us/azure/app-service/environment/overview"
 skill_area: "app-service"
 study_guide: "2026-04-17"

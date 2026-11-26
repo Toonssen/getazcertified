@@ -6,7 +6,7 @@ question: |-
 
   Which public IP addresses can you use for the frontend of lbg-web?
 documentation:
-  - title: "Public IP addresses with Load Balancer"
+  - title: "Public IPs on Load Balancer"
     url: "https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/configure-public-ip-load-balancer"
   - title: "Global (cross-region) load balancer"
     url: "https://learn.microsoft.com/en-us/azure/load-balancer/cross-region-overview"

@@ -8,7 +8,7 @@ question: |-
 documentation:
   - title: "Lifecycle management overview"
     url: "https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview"
-  - title: "Blob rehydration from the archive tier"
+  - title: "Rehydrate archived blobs"
     url: "https://learn.microsoft.com/en-us/azure/storage/blobs/archive-rehydrate-overview"
 skill_area: "files-blob"
 study_guide: "2026-04-17"

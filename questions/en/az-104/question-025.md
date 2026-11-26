@@ -8,9 +8,9 @@ question: |-
 
   What should you do first?
 documentation:
-  - title: "Share-level permissions for Azure Files"
+  - title: "Azure Files share permissions"
     url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
-  - title: "Azure Files identity-based auth"
+  - title: "Azure Files identity auth"
     url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
   - title: "Authorize data access in Azure Storage"
     url: "https://learn.microsoft.com/en-us/azure/storage/common/authorize-data-access"

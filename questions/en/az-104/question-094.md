@@ -6,7 +6,7 @@ question: |-
 
   What should you create first?
 documentation:
-  - title: "Multi-user auth with Resource Guard"
+  - title: "Resource Guard multi-user auth"
     url: "https://learn.microsoft.com/en-us/azure/backup/multi-user-authorization-concept"
   - title: "Resource locks"
     url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources"

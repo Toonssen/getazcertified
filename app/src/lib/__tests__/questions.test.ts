@@ -79,8 +79,8 @@ describe("documentation links", () => {
     }
     const q25 = questions.find((q) => q.id === "az-104-025");
     expect(q25?.documentation?.map((d) => d.title)).toEqual([
-      "Share-level permissions for Azure Files",
-      "Azure Files identity-based auth",
+      "Azure Files share permissions",
+      "Azure Files identity auth",
       "Authorize data access in Azure Storage",
     ]);
   });
