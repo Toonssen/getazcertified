@@ -6,9 +6,12 @@ question: |-
 
   Which two settings should you enable on stcorp22?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/files/files-smb-protocol"
-  - "https://learn.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer"
-  - "https://learn.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version"
+  - title: "SMB file shares in Azure Files"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/files-smb-protocol"
+  - title: "Require secure transfer"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/storage-require-secure-transfer"
+  - title: "Enforce a minimum TLS version"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "choose-n"

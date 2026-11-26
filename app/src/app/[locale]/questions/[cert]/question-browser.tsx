@@ -307,10 +307,10 @@ export function QuestionBrowser({ questions }: QuestionBrowserProps) {
       {/* Question card */}
       <QuestionCard
         headerLabel={tQ("questionOf", { current: currentIndex + 1, total: orderedQuestions.length })}
-        documentationHrefs={currentQuestion.documentation}
+        documentation={currentQuestion.documentation}
         reportHref={IS_PREVIEW ? undefined : `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert: currentQuestion.cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${currentQuestion.cert}/question-${currentQuestion.id.replace(`${currentQuestion.cert}-`, "")}.md)` }))}&labels=question-issue`}
         learnMoreLabel={tQ("learnMore")}
-        moreDocsLabel={tQ("moreDocs")}
+        mainDocLabel={tQ("mainDoc")}
         reportLabel={tQ("report")}
         reportTooltip={tQ("reportTooltip")}
         footer={

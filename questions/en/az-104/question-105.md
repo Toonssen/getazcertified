@@ -6,8 +6,10 @@ question: |-
 
   What should you configure?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/action-groups"
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-processing-rules"
+  - title: "Action groups"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/action-groups"
+  - title: "Alert processing rules"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-processing-rules"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

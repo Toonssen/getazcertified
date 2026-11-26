@@ -6,8 +6,10 @@ question: |-
 
   "A user who has the Owner role for the subscription can mount the file shares in stexport02 by using their Microsoft Entra credentials."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
-  - "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
+  - title: "Azure Files identity-based auth"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-active-directory-overview"
+  - title: "Share-level permissions for Azure Files"
+    url: "https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-assign-share-level-permissions"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

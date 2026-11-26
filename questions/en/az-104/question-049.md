@@ -10,7 +10,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "The first storage account that the deployment creates is named stdiag01."
-documentation: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
+documentation:
+  - title: "Deploy multiple resource instances"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/copy-resources"
 skill_area: "arm-bicep"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

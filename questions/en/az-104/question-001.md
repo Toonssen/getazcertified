@@ -6,8 +6,10 @@ question: |-
 
   At which objects can you assign the role?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/role-based-access-control/scope-overview"
-  - "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units"
+  - title: "Azure RBAC scope"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/scope-overview"
+  - title: "Administrative units"
+    url: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units"
 skill_area: "access-azure-resources"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"

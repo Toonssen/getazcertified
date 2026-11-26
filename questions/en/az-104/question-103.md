@@ -6,8 +6,10 @@ question: |-
 
   Which kind of policy do you need?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-enhanced-policy"
-  - "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
+  - title: "Back up VMs with the Enhanced policy"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-enhanced-policy"
+  - title: "Backup vaults overview"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "best-choice"

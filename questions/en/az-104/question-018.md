@@ -6,8 +6,10 @@ question: |-
 
   "User3 can delete vm-app1."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps"
-  - "https://learn.microsoft.com/en-us/azure/role-based-access-control/overview"
+  - title: "Steps to assign an Azure role"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps"
+  - title: "What is Azure RBAC?"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/overview"
 skill_area: "access-azure-resources"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

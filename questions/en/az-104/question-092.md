@@ -8,8 +8,10 @@ question: |-
 
   What should you do next?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns"
-  - "https://learn.microsoft.com/en-us/azure/dns/dns-zones-records"
+  - title: "Host your domain in Azure DNS"
+    url: "https://learn.microsoft.com/en-us/azure/dns/dns-delegate-domain-azure-dns"
+  - title: "DNS zones and records"
+    url: "https://learn.microsoft.com/en-us/azure/dns/dns-zones-records"
 skill_area: "name-resolution-load-balancing"
 study_guide: "2026-04-17"
 archetype: "best-choice"

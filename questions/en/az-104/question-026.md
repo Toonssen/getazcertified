@@ -5,7 +5,9 @@ question: |-
   Select the answer that completes the following statement.
 
   "To minimize the network costs of the traffic between stmedia04 and its internet clients, modify the ____ setting."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/network-routing-preference"
+documentation:
+  - title: "Network routing preference"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/network-routing-preference"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

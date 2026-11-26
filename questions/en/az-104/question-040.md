@@ -5,7 +5,9 @@ question: |-
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
   "User2 can read blobs in media."
-documentation: "https://learn.microsoft.com/en-us/azure/storage/common/shared-key-authorization-prevent"
+documentation:
+  - title: "Prevent Shared Key authorization"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/shared-key-authorization-prevent"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

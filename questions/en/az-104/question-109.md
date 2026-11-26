@@ -5,7 +5,9 @@ question: |-
   You need to validate the disaster recovery plan without affecting production workloads or ongoing replication.
 
   What should you do?
-documentation: "https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-test-failover-to-azure"
+documentation:
+  - title: "Run a Site Recovery test failover"
+    url: "https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-test-failover-to-azure"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "best-choice"

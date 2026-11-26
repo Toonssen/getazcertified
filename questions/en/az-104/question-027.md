@@ -6,8 +6,10 @@ question: |-
 
   "After starchive9 is created, you can change the ____ setting."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/storage/common/infrastructure-encryption-enable"
-  - "https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
+  - title: "Infrastructure encryption"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/infrastructure-encryption-enable"
+  - title: "Customer-managed keys"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview"
 skill_area: "storage-accounts"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

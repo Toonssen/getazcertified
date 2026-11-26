@@ -6,8 +6,10 @@ question: |-
 
   Which two settings should you enable?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview"
-  - "https://learn.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-peering-gateway-transit"
+  - title: "Virtual network peering"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview"
+  - title: "VPN gateway transit for peering"
+    url: "https://learn.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-peering-gateway-transit"
 skill_area: "virtual-networks"
 study_guide: "2026-04-17"
 archetype: "choose-n"

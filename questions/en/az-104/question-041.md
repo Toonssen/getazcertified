@@ -6,8 +6,10 @@ question: |-
 
   "User3 can read blobs in media."
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/storage"
-  - "https://learn.microsoft.com/en-us/azure/storage/common/shared-key-authorization-prevent"
+  - title: "Built-in roles for Storage"
+    url: "https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles/storage"
+  - title: "Prevent Shared Key authorization"
+    url: "https://learn.microsoft.com/en-us/azure/storage/common/shared-key-authorization-prevent"
 skill_area: "storage-access"
 study_guide: "2026-04-17"
 archetype: "exhibit-statement"

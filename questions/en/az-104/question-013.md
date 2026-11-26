@@ -5,7 +5,9 @@ question: |-
   On March 1, you delete Kim's account. No one permanently deletes it afterwards.
 
   Until approximately which date can you restore Kim's account from Deleted users?
-documentation: "https://learn.microsoft.com/en-us/entra/fundamentals/users-restore"
+documentation:
+  - title: "Restore a deleted user"
+    url: "https://learn.microsoft.com/en-us/entra/fundamentals/users-restore"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "calculate"

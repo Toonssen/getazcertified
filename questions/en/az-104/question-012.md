@@ -11,7 +11,9 @@ question: |-
   The solution must follow the principle of least privilege.
 
   Which Microsoft Entra role should you assign to Ops3?
-documentation: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference"
+documentation:
+  - title: "Microsoft Entra built-in roles"
+    url: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "best-choice"

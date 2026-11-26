@@ -6,8 +6,10 @@ question: |-
 
   What should you configure?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview"
-  - "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-service-endpoints-overview"
+  - title: "What is a private endpoint?"
+    url: "https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-overview"
+  - title: "Virtual network service endpoints"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-service-endpoints-overview"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "best-choice"

@@ -1,38 +1,68 @@
 // @vitest-environment jsdom
-import { render } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, it, expect } from "vitest";
 import { QuestionCard, docPageTitle } from "@/components/quiz/QuestionCard";
-import { toDocLinks } from "@/lib/questions";
+import { toDocLinks, type DocLink } from "@/lib/doc-links";
 
 const A = "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview";
 const B = "https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-enhanced-policy";
+const C = "https://learn.microsoft.com/en-us/azure/backup/backup-overview";
+const DOCS: DocLink[] = [
+  { title: "Backup vaults overview", url: A },
+  { title: "Back up VMs with the Enhanced policy", url: B },
+  { title: "What is Azure Backup?", url: C },
+];
 
-function links(hrefs: string[]) {
-  const { container } = render(
+function renderCard(docs: DocLink[]) {
+  return render(
     <QuestionCard
       headerLabel="Question 1 of 1"
-      documentationHrefs={hrefs}
+      documentation={docs}
       learnMoreLabel="Learn more in the docs"
-      moreDocsLabel="More in the docs"
+      mainDocLabel="Main page"
       footer={null}
     >
       body
     </QuestionCard>,
   );
-  return Array.from(container.querySelectorAll("a")).map((a) => a.getAttribute("href"));
 }
 
-describe("QuestionCard documentation links", () => {
-  it("renders one link for a single page", () => {
-    expect(links([A])).toEqual([A]);
+describe("QuestionCard documentation menu", () => {
+  afterEach(cleanup);
+
+  it("shows one trigger, whatever the number of links, and no loose doc links", () => {
+    for (const docs of [DOCS.slice(0, 1), DOCS]) {
+      const { container, unmount } = renderCard(docs);
+      expect(screen.getAllByTestId("docs-menu-trigger")).toHaveLength(1);
+      expect(container.querySelectorAll('a[href^="https://learn.microsoft.com"]')).toHaveLength(0);
+      unmount();
+    }
   });
 
-  it("renders every page when there are several", () => {
-    expect(links([A, B]).sort()).toEqual([A, B].sort());
+  it("lists every link by title when opened, opening in a new tab", async () => {
+    renderCard(DOCS);
+    fireEvent.click(screen.getByTestId("docs-menu-trigger"));
+    const items = await screen.findAllByRole("menuitem");
+    expect(items.map((el) => el.getAttribute("href"))).toEqual([A, B, C]);
+    expect(items.map((el) => el.textContent)).toEqual([
+      "Backup vaults overviewMain page",
+      "Back up VMs with the Enhanced policy",
+      "What is Azure Backup?",
+    ]);
+    for (const el of items) {
+      expect(el.getAttribute("target")).toBe("_blank");
+      expect(el.getAttribute("rel")).toBe("noopener noreferrer");
+    }
   });
 
-  it("renders no link when there are none", () => {
-    expect(links([])).toEqual([]);
+  it("says how many pages the menu holds", () => {
+    renderCard(DOCS);
+    expect(screen.getByTestId("docs-menu-trigger").getAttribute("aria-label")).toBe("Learn more in the docs (3)");
+  });
+
+  it("renders no menu when there are no links", () => {
+    renderCard([]);
+    expect(screen.queryByTestId("docs-menu-trigger")).toBeNull();
   });
 
   it("names a page from its slug", () => {
@@ -41,9 +71,20 @@ describe("QuestionCard documentation links", () => {
 });
 
 describe("toDocLinks", () => {
-  it("accepts a string or a list", () => {
-    expect(toDocLinks(A)).toEqual([A]);
-    expect(toDocLinks([A, B])).toEqual([A, B]);
+  it("reads title + url entries", () => {
+    expect(toDocLinks([{ title: "Backup vaults overview", url: A }])).toEqual([DOCS[0]]);
+  });
+
+  it("falls back to a title from the URL for a bare string or a missing title", () => {
+    expect(toDocLinks(A)).toEqual([{ title: "backup vault overview", url: A }]);
+    expect(toDocLinks([{ url: A }, { title: "  ", url: B }])).toEqual([
+      { title: "backup vault overview", url: A },
+      { title: "backup azure vms enhanced policy", url: B },
+    ]);
+  });
+
+  it("drops entries without a url", () => {
+    expect(toDocLinks([{ title: "No url" }, null, ""])).toEqual([]);
     expect(toDocLinks(undefined)).toEqual([]);
   });
 });

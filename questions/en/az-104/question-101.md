@@ -6,8 +6,10 @@ question: |-
 
   What should you use as the scope of the alert rule?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types"
-  - "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-rule-overview"
+  - title: "Types of Azure Monitor alerts"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/alerts-types"
+  - title: "Data collection rules"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/data-collection/data-collection-rule-overview"
 skill_area: "monitor-resources"
 study_guide: "2026-04-17"
 archetype: "best-choice"

@@ -5,7 +5,9 @@ question: |-
   During the first hour after you save the setting, the average CPU percentage stays at 10 percent.
 
   How many instances are running at the end of the hour?
-documentation: "https://learn.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-understanding-settings"
+documentation:
+  - title: "Autoscale settings in Azure Monitor"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-understanding-settings"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "calculate"

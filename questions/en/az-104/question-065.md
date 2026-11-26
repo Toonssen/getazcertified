@@ -5,7 +5,9 @@ question: |-
   You need to configure continuous deployment so that every push to the main branch of an Azure Repos repository is deployed to app-catalog.
 
   What should you use?
-documentation: "https://learn.microsoft.com/en-us/azure/app-service/deploy-continuous-deployment"
+documentation:
+  - title: "Continuous deployment for App Service"
+    url: "https://learn.microsoft.com/en-us/azure/app-service/deploy-continuous-deployment"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "best-choice"

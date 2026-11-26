@@ -10,7 +10,9 @@ question: |-
   You need to allow HTTP and HTTPS traffic from the internet to snet-dmz without allowing any other new traffic.
 
   What should you change?
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview"
+documentation:
+  - title: "Network security groups"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview"
 skill_area: "secure-vnet-access"
 study_guide: "2026-04-17"
 archetype: "best-choice"

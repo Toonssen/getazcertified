@@ -5,7 +5,9 @@ question: |-
   A rack (power and network) fails in the datacenter that hosts as-api-neu.
 
   What is the maximum number of virtual machines in as-api-neu that can be unavailable because of the failure?
-documentation: "https://learn.microsoft.com/en-us/azure/virtual-machines/availability-set-overview"
+documentation:
+  - title: "Availability sets"
+    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/availability-set-overview"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "calculate"

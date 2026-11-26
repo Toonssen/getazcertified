@@ -5,7 +5,9 @@ question: |-
   Select the answer that completes the following statement.
 
   "After the first scale-out action, the earliest that the scale-out rule can start another scale-out action is ____ later."
-documentation: "https://learn.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-understanding-settings"
+documentation:
+  - title: "Autoscale settings in Azure Monitor"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/autoscale/autoscale-understanding-settings"
 skill_area: "app-service"
 study_guide: "2026-04-17"
 archetype: "complete-statement"

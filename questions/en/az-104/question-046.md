@@ -6,8 +6,10 @@ question: |-
 
   Which value should you use for <cmdlet>?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-powershell"
-  - "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-specs"
+  - title: "Deploy templates with PowerShell"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/deploy-powershell"
+  - title: "Template specs"
+    url: "https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/template-specs"
 skill_area: "arm-bicep"
 study_guide: "2026-04-17"
 archetype: "complete-code"

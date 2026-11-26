@@ -8,7 +8,9 @@ question: |-
   - Users who aren't administrators must be prevented from creating new Microsoft Entra tenants.
 
   Which two settings should you modify?
-documentation: "https://learn.microsoft.com/en-us/entra/fundamentals/users-default-permissions"
+documentation:
+  - title: "Default user permissions"
+    url: "https://learn.microsoft.com/en-us/entra/fundamentals/users-default-permissions"
 skill_area: "entra-users-groups"
 study_guide: "2026-04-17"
 archetype: "choose-n"

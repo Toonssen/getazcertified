@@ -4,8 +4,10 @@ question: |-
 
   To which vaults can you back up disk-sql02 by using Azure Disk Backup?
 documentation:
-  - "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
-  - "https://learn.microsoft.com/en-us/azure/backup/disk-backup-overview"
+  - title: "Backup vaults overview"
+    url: "https://learn.microsoft.com/en-us/azure/backup/backup-vault-overview"
+  - title: "Azure Disk Backup overview"
+    url: "https://learn.microsoft.com/en-us/azure/backup/disk-backup-overview"
 skill_area: "backup-recovery"
 study_guide: "2026-04-17"
 archetype: "exhibit-select"
