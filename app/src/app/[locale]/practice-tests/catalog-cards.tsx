@@ -6,11 +6,16 @@ import { useTranslations } from "next-intl";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { CERT_META } from "@/lib/cert-meta";
+import { certVisual } from "@/lib/cert-meta";
 
 interface CertData {
   id: string;
   name: string;
+  description: string;
+  color: number;
+  icon: string;
+  /** Draft certs (dev site only) get the Beta badge. */
+  draft: boolean;
   questions: number;
 }
 
@@ -21,7 +26,6 @@ interface Props {
 
 export function CatalogCards({ certs, locale }: Props) {
   const t = useTranslations("CatalogCard");
-  const tCert = useTranslations("CertDescriptions");
   const defaultCount = (total: number) => Math.min(60, total);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [expandedCert, setExpandedCert] = useState<string | null>(null);
@@ -29,8 +33,7 @@ export function CatalogCards({ certs, locale }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
       {certs.map((cert) => {
-        const meta = CERT_META[cert.id as keyof typeof CERT_META];
-        if (!meta) return null;
+        const meta = certVisual(cert.color, cert.icon, cert.draft);
 
         const count = counts[cert.id] ?? defaultCount(cert.questions);
         const isExpanded = expandedCert === cert.id;
@@ -85,7 +88,7 @@ export function CatalogCards({ certs, locale }: Props) {
                       </span>
                     </div>
                     <p className="text-[13.5px] text-muted-foreground/80 leading-relaxed mt-2.5 line-clamp-2">
-                      {tCert(cert.id)}
+                      {cert.description}
                     </p>
                   </div>
                 </div>

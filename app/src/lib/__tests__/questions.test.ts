@@ -16,6 +16,8 @@ const locales = readdirSync(QUESTIONS_ROOT).filter(
   (entry) =>
     !entry.startsWith(".") &&
     !entry.endsWith(".md") &&
+    entry !== "certs" && // the certification registry, not a locale
+
     existsSync(join(QUESTIONS_ROOT, entry)),
 );
 
@@ -83,5 +85,29 @@ describe("documentation links", () => {
       "Azure Files identity auth",
       "Authorize data access in Azure Storage",
     ]);
+  });
+});
+
+describe("certification registry", () => {
+  it("lists live certs, and drafts only when asked", async () => {
+    const { mkdtempSync, mkdirSync, writeFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { loadCertRegistry } = await import("../questions");
+    const root = mkdtempSync(join(tmpdir(), "certs-"));
+    mkdirSync(join(root, "certs"));
+    const cert = (id: string, status: string) =>
+      writeFileSync(join(root, "certs", `${id}.json`), JSON.stringify({ id, title: id, status, color: 1, icon: "cloud" }));
+    cert("az-104", "live");
+    cert("sc-500", "draft");
+    expect(loadCertRegistry(root, false).map((c) => c.id)).toEqual(["az-104"]);
+    expect(loadCertRegistry(root, true).map((c) => c.id)).toEqual(["az-104", "sc-500"]);
+  });
+
+  it("reads the real AZ-104 entry with its look and description", async () => {
+    const { getCertCatalog } = await import("../questions");
+    const az = getCertCatalog().find((c) => c.cert === "az-104");
+    expect(az).toMatchObject({ title: "Azure Administrator (AZ-104)", color: 1, icon: "server-cog", status: "live" });
+    expect(az?.description.length).toBeGreaterThan(20);
+    expect(az?.questionCount).toBeGreaterThan(100);
   });
 });

@@ -39,6 +39,10 @@ export default async function PracticeTestsPage({ params }: Props) {
   const certs = getCertCatalog(parseSupportedLocale(locale)).map((c) => ({
     id: c.cert,
     name: c.title,
+    description: c.description,
+    color: c.color,
+    icon: c.icon,
+    draft: c.status === "draft",
     questions: c.questionCount,
   }));
 
