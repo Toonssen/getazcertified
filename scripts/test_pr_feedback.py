@@ -86,6 +86,22 @@ class RenderTests(unittest.TestCase):
         self.assertIn("`questions/en/az-104/question-005.md`", body)
         self.assertNotIn("../x", body)
 
+    def test_exactly_one_verdict(self):
+        verdicts = ("Some things to fix", "All checks passed", "didn't finish", "another check failed")
+        cases = [
+            ({"files": [], "other_problems": ["p"], "next_numbers": {}}, [], "failure", [], "Some things to fix"),
+            ({"files": [], "other_problems": [], "next_numbers": {}}, ["q.md:1: Unknown word (x)"], "failure", [], "Some things to fix"),
+            ({"files": [], "other_problems": [], "next_numbers": {}}, [], "success", [], "All checks passed"),
+            ({"files": [], "other_problems": [], "next_numbers": {}}, [], "failure", [], "another check failed"),
+            (None, [], "failure", [], "didn't finish"),
+        ]
+        for report, spelling, conclusion, other, want in cases:
+            body = pf.render(report, spelling, conclusion, False, "u", None, other)
+            self.assertEqual([v for v in verdicts if v in body], [want], (report, spelling, conclusion))
+        body = pf.render({"files": [], "other_problems": ["p"], "next_numbers": {}}, [], "failure", False, "u", None, ["check"])
+        self.assertIn("Also failed: `check`", body)
+        self.assertNotIn("All checks passed", body)
+
     def test_pass_and_welcome(self):
         body = pf.render({"files": [], "other_problems": [], "next_numbers": {}}, [], "success", True, "u")
         self.assertIn("All checks passed", body)
