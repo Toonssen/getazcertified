@@ -4,3 +4,9 @@
 .env.*
 node_modules/
 .wrangler/
+dist/
+app/out/
+app/.next/
+app/node_modules/
+app/playwright-report/
+app/test-results/

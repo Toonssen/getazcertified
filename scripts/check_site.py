@@ -43,8 +43,12 @@ def is_external(url: str) -> bool:
     return bool(p.scheme and p.scheme not in ("", "data")) or url.startswith("//")
 
 
+# Paths the app build provides next to the landing page (scripts/assemble.py); they don't exist in site/ itself.
+APP_PREFIXES = ("/en/",)
+
+
 def check_local(ref: str, base: Path, where: str) -> None:
-    if not ref or ref.startswith(("#", "mailto:")):
+    if not ref or ref.startswith(("#", "mailto:")) or ref.startswith(APP_PREFIXES):
         return
     path = urlparse(ref).path
     target = (SITE / path.lstrip("/")) if path.startswith("/") else (base.parent / path)
