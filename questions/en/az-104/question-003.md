@@ -4,7 +4,7 @@ question: |-
 
   You assign an Azure Policy definition as shown in the following exhibit.
 
-  After the assignment, you create a storage account named stsales02 in RG-Sales. You make no other changes.
+  After the policy is assigned, you create a storage account named stsales02 in RG-Sales and make no other changes.
 
   For the following statement, select Yes if the statement is true. Otherwise, select No.
 
