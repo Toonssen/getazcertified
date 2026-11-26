@@ -12,6 +12,12 @@ purpose; [CONTRIBUTING.md](CONTRIBUTING.md) is the contributor's side.
 
 A quick "Thanks, I'll look at this on the weekend" counts as a reply. Nothing is closed automatically for being quiet.
 
+## Starting the checks for a first-time contributor
+
+GitHub holds the workflows of someone without a merged PR until you click **Approve and run workflows** on the PR, on
+every push. If they pushed several commits within seconds, GitHub sometimes creates no checks for the newest commit
+(seen 2026-11-26), and no button shows up. Close and reopen the PR: that starts the checks for the latest commit.
+
 ## Reviewing a question
 
 The checks already cover the format, links, spelling and numbering. The review is about the content:
