@@ -46,9 +46,9 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref }}
           HEAD_REF: ${{ github.head_ref }}
-          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
         run: |
           set -euo pipefail
+          HEAD_REPO=$(jq -r '.pull_request.head.repo.full_name' "$GITHUB_EVENT_PATH")
           changed=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- app questions scripts/check_questions.py cspell.json .node-version)
           if [[ -n "$changed" ]] && { [[ "$HEAD_REF" != release/* ]] || [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; }; then
             echo "::error::These paths are release snapshots of the dev repo and change only through a release PR:"
@@ -59,6 +59,15 @@ jobs:
           echo "release-only paths: ok"
       - name: Landing page checks (references, no third-party loads, no scripts, security headers)
         run: python3 scripts/check_site.py
+      - name: No github.event expressions in workflows (untrusted input; read $GITHUB_EVENT_PATH with jq instead)
+        run: |
+          set -euo pipefail
+          # Same rule as the repo audit: event payload fields (github.event_name is fine). Pattern split so this line can't match itself.
+          pattern='$''{{ github.event.'
+          if grep -nF "$pattern" .github/workflows/*.yml; then
+            echo "::error::Workflows must not use event payload expressions (untrusted input); read the value from \$GITHUB_EVENT_PATH with jq in the step."
+            exit 1
+          fi
       - name: actionlint (pinned release, checksum verified)
         run: |
           set -euo pipefail
