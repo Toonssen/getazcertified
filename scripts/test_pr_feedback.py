@@ -8,7 +8,7 @@ from pathlib import Path
 import pr_feedback as pf
 
 SHA = "a" * 40
-EVENT = {"workflow_run": {"event": "pull_request", "head_sha": SHA, "conclusion": "failure", "html_url": "https://x/run/1"}}
+EVENT = {"workflow_run": {"id": 99, "event": "pull_request", "head_sha": SHA, "conclusion": "failure", "html_url": "https://x/run/1"}}
 
 
 class FakeGitHub:
@@ -17,8 +17,12 @@ class FakeGitHub:
         self.labels = [{"name": l} for l in labels]
         self.calls = []
 
+    jobs = ()
+
     def call(self, method, path, body=None):
         self.calls.append((method, path, body))
+        if method == "GET" and path.startswith("/actions/runs/"):
+            return {"jobs": [{"name": n, "conclusion": c} for n, c in self.jobs]}
         if method == "GET" and path.startswith("/pulls/"):
             return {"state": "open", "head": {"sha": self.sha}, "author_association": self.association}
         return {}
@@ -90,6 +94,18 @@ class RenderTests(unittest.TestCase):
 
 
 class RunTests(unittest.TestCase):
+    def test_names_other_failed_jobs_and_only_the_prs_certs(self):
+        gh = FakeGitHub([{"filename": "questions/en/az-900/question-001.md", "status": "added"}])
+        gh.jobs = (("check", "failure"), ("questions", "failure"), ("unit", "success"))
+        report = dict(REPORT, next_numbers={"az-104": 110, "az-900": 2})
+        with tempfile.TemporaryDirectory() as tmp:
+            pf.run(gh, EVENT, artifact(tmp, report=report))
+        body = next(b for m, p, b in gh.calls if m == "POST" and p.endswith("/comments"))["body"]
+        self.assertIn("Also failed: `check`", body)
+        self.assertIn("from a fork", body)
+        nexts = next(l for l in body.splitlines() if l.startswith("Next free file name"))
+        self.assertEqual(nexts, "Next free file name: `questions/en/az-900/question-002.md`")
+
     def test_posts_comment_and_labels(self):
         gh = FakeGitHub([{"filename": "questions/en/az-104/question-110.md", "status": "added"}])
         with tempfile.TemporaryDirectory() as tmp:

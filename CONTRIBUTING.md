@@ -81,7 +81,7 @@ the site links it), click the pencil, edit in place and propose the change.
      Keep `"status": "draft"`: draft certifications aren't shown on the site yet.
    - Add questions in `questions/en/<exam>/`, starting at `question-001.md`.
 3. Once the set is big enough (at least 20 questions, spread over the skill groups) the maintainer switches it to
-   `"live"`.
+   `"live"` and adds its skill-area table to `questions/README.md`. You don't need to edit the README for a draft.
 
 ## What happens after you open a pull request
 
