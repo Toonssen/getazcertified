@@ -31,10 +31,10 @@
     "heroMockAnswer2": "Encryption at host",
     "heroMockAnswer3": "A custom Azure role",
     "communityLabel": "Community",
-    "communityTitle": "Built by {count}+ contributors",
+    "communityTitle": "{count, plural, one {Thanks to our contributor} other {Thanks to our # contributors}}",
     "communityDescription": "Every question, fix and improvement comes from people studying for the same exams.",
     "joinContributors": "Write a question",
-    "contributorTooltip": "{login} — {count} contributions",
+    "contributorTooltip": "{login}: {count, plural, one {# contribution} other {# contributions}}",
     "tryChallenges": "Try Challenge Modes",
     "ctaPracticeTest": "Take a Practice Test",
     "heroDescriptionPreview": "Free practice questions for Microsoft Azure certifications, each one linked to the Microsoft Learn page that explains it. Take a timed practice test or browse every question with its explanation."
@@ -64,6 +64,8 @@
   "QuestionCommon": {
     "report": "Report",
     "reportTooltip": "Report an issue with this question",
+    "improve": "Improve",
+    "improveTooltip": "Suggest a better wording or fix on GitHub (opens the editor)",
     "reportIssueTitle": "[{cert}] Issue with {questionId}",
     "answerGroup": "Answer options",
     "answerOption": "Option {number}: {text}",

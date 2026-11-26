@@ -83,6 +83,25 @@ test("report link opens the public repo's issue form with the question filled in
   );
 });
 
+test("contributors are credited with avatars served from the site itself", async ({ page }) => {
+  await page.goto("/en/");
+  await expect(page.getByRole("heading", { name: /thanks to our/i })).toBeVisible({ timeout: 15_000 });
+  const avatars = page.locator('a[href^="https://github.com/"] img');
+  await expect(avatars.first()).toBeVisible();
+  const srcs = await avatars.evaluateAll((els) => els.map((e) => new URL((e as HTMLImageElement).src).origin));
+  expect(new Set(srcs)).toEqual(new Set([new URL(page.url()).origin]));
+});
+
+test("improve link opens the web editor for the question in the public repo", async ({ page }) => {
+  await page.goto("/en/questions/az-104");
+  const improve = page.getByTestId("improve-link");
+  await expect(improve).toBeVisible({ timeout: 15_000 });
+  await expect(improve).toHaveAttribute(
+    "href",
+    "https://github.com/Toonssen/getazcertified/edit/main/questions/en/az-104/question-001.md",
+  );
+});
+
 test("contribute card points at CONTRIBUTING in the public repo", async ({ page }) => {
   await page.goto("/en/practice-tests/az-104?questions=3");
   // base-ui renders the Button as <a role="button">, so find the anchor itself.
