@@ -30,6 +30,8 @@ for (const path of APP_PAGES) {
     await page.waitForLoadState("networkidle");
     await expect(page.getByTestId("sneak-peek-banner")).toBeVisible();
     await expect(page.getByRole("link", { name: /challenge/i })).toHaveCount(0);
+    // Contributions and issue reports open at the full launch; no links to them yet.
+    await expect(page.getByRole("link", { name: /contribute|write a question|report/i })).toHaveCount(0);
     expect(problems).toEqual([]);
   });
 }
