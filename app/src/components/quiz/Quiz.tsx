@@ -28,7 +28,7 @@ import { FeedbackAlert } from "@/components/quiz/FeedbackAlert";
 import { QuizResults } from "@/components/quiz/QuizResults";
 import { QuizQuestionMap } from "@/components/quiz/QuizQuestionMap";
 import { SubmitDialog } from "@/components/quiz/SubmitDialog";
-import { SITE_REPO_URL } from "@/lib/site";
+import { IS_PREVIEW, SITE_REPO_URL } from "@/lib/site";
 
 interface QuizProps {
   questions: Question[];
@@ -241,7 +241,7 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
             ) : undefined
           }
           documentationHrefs={currentQuestion.documentation}
-          reportHref={`${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${cert}/question-${currentQuestion.id.replace(`${cert}-`, "")}.md)` }))}&labels=question-issue`}
+          reportHref={IS_PREVIEW ? undefined : `${SITE_REPO_URL}/issues/new?title=${encodeURIComponent(tQ("reportIssueTitle", { cert, questionId: currentQuestion.id }))}&body=${encodeURIComponent(tQ("reportIssueBody", { question: currentQuestion.question, fileLink: `[${currentQuestion.id}](${SITE_REPO_URL}/blob/main/questions/en/${cert}/question-${currentQuestion.id.replace(`${cert}-`, "")}.md)` }))}&labels=question-issue`}
           learnMoreLabel={tQ("learnMore")}
           moreDocsLabel={tQ("moreDocs")}
           reportLabel={tQ("report")}
@@ -391,7 +391,8 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
             }}
           />
 
-          {/* Contribute CTA */}
+          {/* Contribute CTA (not in the preview: contributions open at the full launch) */}
+          {!IS_PREVIEW && (
           <Card className="bg-foreground text-card border-foreground shadow-sm">
             <CardContent className="px-4 py-3.5 flex items-center justify-between gap-3">
               <span className="text-[13px] text-card/65 leading-snug">{t("contributePrompt")}</span>
@@ -404,6 +405,7 @@ export function Quiz({ questions, questionCount, cert, certName }: QuizProps) {
               </Button>
             </CardContent>
           </Card>
+          )}
         </div>
       </div>
 
