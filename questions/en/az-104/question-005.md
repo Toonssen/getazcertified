@@ -22,7 +22,7 @@ archetype: "choose-n"
 - [x] Restrict non-admin users from creating tenants
   > Set to Yes: only admins with the Tenant Creator role (or higher) can create a new tenant.
 - [ ] Restrict access to Microsoft Entra admin center
-  > This only hides the admin center UI from non-admins. It doesn't block PowerShell or Microsoft Graph, and it
+  > This only hides the admin center UI from non-admins. It does not block PowerShell or Microsoft Graph, and it
   > controls neither app registrations nor tenant creation.
 - [ ] Guest user access restrictions
   > This limits what guest users can see in the directory, not what members can create.
