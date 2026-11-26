@@ -1,6 +1,6 @@
 ---
 question: |-
-  You have an Azure subscription that contains a storage acount named st1.
+  You have an Azure subscription that contains a storage account named st1.
 
   You need to ensure that blobs in st1 can be restored to any point in the last 7 days.
 
@@ -8,7 +8,7 @@ question: |-
 documentation:
   - title: "Point-in-time restore for block blobs"
     url: "https://learn.microsoft.com/en-us/azure/storage/blobs/point-in-time-restore-overview"
-skill_area: "storage-acess"
+skill_area: "files-blob"
 study_guide: "2026-04-17"
 archetype: "best-choice"
 ---
@@ -18,3 +18,4 @@ archetype: "best-choice"
 - [ ] Geo-redundant storage
   > Geo-redundancy copies data to another region; it doesn't let you restore earlier states.
 - [ ] A resource lock on st1
+  > A lock prevents deleting or changing st1; it doesn't keep earlier versions of the data.
