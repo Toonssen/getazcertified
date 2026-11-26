@@ -200,6 +200,9 @@ jobs:
         run: npm run build
         working-directory: app
         env:
+          # Read-only token for the contributors list (app/scripts/fetch-contributors.mjs); unauthenticated calls
+          # from shared runners hit the rate limit (403) and the list came out empty.
+          GITHUB_TOKEN: ${{ github.token }}
           NEXT_PUBLIC_SITE_MODE: preview
           NEXT_PUBLIC_SITE_URL: https://getazcertified.com
           NEXT_PUBLIC_SITE_REPO: Toonssen/getazcertified
