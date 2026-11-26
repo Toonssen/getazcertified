@@ -1,54 +1,33 @@
-import { SITE_REPO as REPO } from "@/lib/site";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 
 export interface Contributor {
   login: string;
-  avatarUrl: string;
+  /** Same-origin path of the saved avatar, e.g. /contributors/octocat.png */
+  avatar: string;
   profileUrl: string;
   contributions: number;
 }
 
 /**
- * Fetch repository contributors from the GitHub API.
- * Filters out bots and returns human contributors sorted by contribution count.
- * Intended to be called at build time (SSG).
- *
- * Uses GITHUB_TOKEN env var when available to avoid rate-limit issues on shared
- * build infrastructure (unauthenticated: 60 req/hr/IP, authenticated: 5000 req/hr).
+ * Contributors of the public repo, saved at build time by scripts/fetch-contributors.mjs (avatars included, so nothing
+ * loads from github.com in the browser). Empty when the file is missing or broken: the home page then hides the section.
  */
-export async function getContributors(): Promise<Contributor[]> {
+export function getContributors(dir = join(process.cwd(), "public", "contributors")): Contributor[] {
+  const file = join(dir, "contributors.json");
+  if (!existsSync(file)) return [];
   try {
-    const headers: HeadersInit = { Accept: "application/vnd.github+json" };
-    const token = process.env.GITHUB_TOKEN;
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO}/contributors?per_page=100`,
-      { headers },
-    );
-
-    if (!res.ok) return [];
-
-    const data: Array<{
-      login: string;
-      avatar_url: string;
-      html_url: string;
-      contributions: number;
-      type: string;
-    }> = await res.json();
-
+    const data = JSON.parse(readFileSync(file, "utf-8"));
+    if (!Array.isArray(data)) return [];
     return data
-      .filter((c) => c.type !== "Bot")
+      .filter((c) => typeof c?.login === "string" && /^\/contributors\/[A-Za-z0-9-]+\.(png|jpg)$/.test(c?.avatar ?? ""))
       .map((c) => ({
         login: c.login,
-        avatarUrl: c.avatar_url,
-        profileUrl: c.html_url,
-        contributions: c.contributions,
+        avatar: c.avatar,
+        profileUrl: `https://github.com/${c.login}`,
+        contributions: Number(c.contributions) || 0,
       }));
   } catch {
-    // Network errors, DNS failures, timeouts — return empty gracefully
-    // so the build succeeds and the contributors section is simply hidden.
     return [];
   }
 }

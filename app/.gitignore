@@ -43,3 +43,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 out/
+
+# saved at build time by scripts/fetch-contributors.mjs
+/public/contributors/

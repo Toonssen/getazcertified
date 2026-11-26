@@ -17,3 +17,12 @@ describe("question report link", () => {
     expect(questionFileUrl("sc-500", "sc-500-003")).toMatch(/questions\/en\/sc-500\/question-003\.md$/);
   });
 });
+
+describe("question improve link", () => {
+  it("opens GitHub's web editor for the question's file in the public repo", async () => {
+    const { questionEditUrl } = await import("@/lib/report");
+    expect(questionEditUrl("az-104", "az-104-025")).toBe(
+      "https://github.com/Toonssen/getazcertified/edit/main/questions/en/az-104/question-025.md",
+    );
+  });
+});
