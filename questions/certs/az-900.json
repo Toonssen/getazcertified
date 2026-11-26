@@ -1,0 +1,23 @@
+{
+  "id": "az-900",
+  "title": "Azure Fundamentals (AZ-900)",
+  "description": "Cloud concepts, Azure architecture and services, and Azure management and governance.",
+  "status": "draft",
+  "study_guide": "2026-01-01",
+  "study_guide_url": "https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900",
+  "color": 2,
+  "icon": "cloud",
+  "domains": [
+    {
+      "id": "management-governance",
+      "name": "Describe Azure management and governance",
+      "weight": [
+        30,
+        35
+      ],
+      "skill_areas": [
+        "resource-management"
+      ]
+    }
+  ]
+}
