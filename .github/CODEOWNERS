@@ -1,0 +1,4 @@
+# Everything is owned by the maintainer. Not enforced as a required review (a sole maintainer can't approve their own
+# PRs); the ruleset, required checks and the production environment's required reviewer are the actual gates.
+*                   @Toonssen
+/.github/           @Toonssen

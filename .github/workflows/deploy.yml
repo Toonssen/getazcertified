@@ -1,0 +1,74 @@
+name: deploy
+
+# Publishes site/ to Cloudflare Pages project "getazcertified" (getazcertified.com).
+#
+# No Cloudflare secret in GitHub: the job runs in environment "production" (deployment branch policy: main only;
+# a required reviewer approves every run) and logs in to Azure with OIDC as id-getazcertified-prod-deploy. Its only
+# federated credential trusts repo:...getazcertified...:environment:production, so a pull request, another branch or
+# a fork can't obtain it. The identity may read one Key Vault secret: the prod deploy token. Infra lives in the
+# private getazcertified-dev repo (infra/azure, infra/cloudflare).
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'site/**' ]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  PAGES_PROJECT: getazcertified
+  WRANGLER_VERSION: 4.160.0
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 scripts/check_site.py
+
+  deploy:
+    needs: [ check ]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    environment:
+      name: production
+      url: https://getazcertified.com
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Read Cloudflare deploy token from Key Vault
+        env:
+          KEY_VAULT_NAME: ${{ vars.KEY_VAULT_NAME }}
+        run: |
+          set -euo pipefail
+          token=$(az keyvault secret show --vault-name "$KEY_VAULT_NAME" --name cloudflare-pages-prod-deploy-token --query value -o tsv)
+          echo "::add-mask::$token"
+          echo "CLOUDFLARE_API_TOKEN=$token" >> "$GITHUB_ENV"
+          az logout
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes "wrangler@${WRANGLER_VERSION}" pages deploy site --project-name "$PAGES_PROJECT" --branch main --commit-dirty=true
