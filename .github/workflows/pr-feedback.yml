@@ -1,0 +1,46 @@
+name: pr-feedback
+
+# Stage 2 of the PR feedback bot: after `ci` ran on a pull request (also from a fork), post one sticky comment (what to
+# fix, next free file name, a welcome for first-timers) and add labels. This is the safe split for fork PRs:
+# - `ci` ran the PR's code with a read-only token and left an artifact (job `questions`);
+# - this workflow has the write token but runs only main's code (scripts/pr_feedback.py), never checks out or runs the
+#   PR, reads the event from $GITHUB_EVENT_PATH, and treats the artifact as untrusted text (see the script's docstring).
+
+on:
+  workflow_run:
+    workflows: [ ci ]
+    types: [ completed ]
+
+permissions: {}
+
+concurrency:
+  group: pr-feedback
+  cancel-in-progress: false
+
+jobs:
+  comment:
+    if: github.event_name == 'workflow_run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Download the feedback artifact of that ci run (if any)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          run_id=$(jq -r '.workflow_run.id' "$GITHUB_EVENT_PATH")
+          [[ "$run_id" =~ ^[0-9]+$ ]] || { echo "no run id"; exit 0; }
+          mkdir -p "$RUNNER_TEMP/feedback"
+          gh run download "$run_id" -R "$GITHUB_REPOSITORY" -n pr-feedback -D "$RUNNER_TEMP/feedback" || echo "no feedback artifact"
+      - name: Comment and label
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/pr_feedback.py "$RUNNER_TEMP/feedback"

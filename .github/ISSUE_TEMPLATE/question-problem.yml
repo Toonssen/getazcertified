@@ -1,0 +1,50 @@
+name: Report a problem with a question
+description: A wrong answer, an outdated fact, an unclear question or a broken link.
+title: "[question] "
+labels: ["question-issue"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! The **Report** link on getazcertified.com fills in the first two fields for you.
+        Want to fix it yourself? Edit the question file and propose the change: see [CONTRIBUTING.md](https://github.com/Toonssen/getazcertified/blob/main/CONTRIBUTING.md#improve-or-reword-a-question).
+  - type: input
+    id: question-id
+    attributes:
+      label: Question
+      description: The question's id, e.g. az-104-025 (shown in the link from the site).
+      placeholder: az-104-025
+    validations:
+      required: true
+  - type: input
+    id: question-file
+    attributes:
+      label: Question file
+      description: Link to the question's file, if you have it.
+      placeholder: https://github.com/Toonssen/getazcertified/blob/main/questions/en/az-104/question-025.md
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem?
+      options:
+        - The marked answer is wrong
+        - The facts are outdated (Azure changed)
+        - The question or an answer is unclear or ambiguous
+        - An explanation is wrong or missing something
+        - A documentation link is broken or doesn't back the answer
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong, and what would be right?
+      description: Be specific; quote the part of the question you mean.
+    validations:
+      required: true
+  - type: input
+    id: evidence
+    attributes:
+      label: Microsoft Learn page that backs your report
+      description: A learn.microsoft.com link helps us fix it quickly.
+      placeholder: https://learn.microsoft.com/en-us/azure/...

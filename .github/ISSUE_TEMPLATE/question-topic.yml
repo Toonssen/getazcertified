@@ -1,0 +1,30 @@
+name: Suggest a question topic
+description: A skill or service that needs (more) practice questions.
+title: "[topic] "
+labels: ["topic-request"]
+body:
+  - type: input
+    id: certification
+    attributes:
+      label: Certification
+      placeholder: az-104
+    validations:
+      required: true
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+      description: Be specific, e.g. "Azure Files identity-based access with on-premises AD DS".
+    validations:
+      required: true
+  - type: input
+    id: learn
+    attributes:
+      label: Microsoft Learn page (optional)
+      placeholder: https://learn.microsoft.com/en-us/azure/...
+  - type: checkboxes
+    id: write
+    attributes:
+      label: Writing it yourself?
+      options:
+        - label: I'd like to write questions for this topic (see CONTRIBUTING.md)
