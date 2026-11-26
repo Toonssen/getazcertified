@@ -8,12 +8,26 @@
 
 import { join } from "node:path";
 import { toDocLinks, type DocLink } from "./doc-links";
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { parseDirectory } from "mdquiz";
 
 // ── App-specific types ──────────────────────────────────────────────
 
-export type CertificationType = "az-104";
+/** A certification id from questions/certs/<id>.json, e.g. "az-104". */
+export type CertificationType = string;
+
+/** questions/certs/<id>.json (validated by scripts/check_questions.py; see CONTRIBUTING.md). */
+export interface CertDefinition {
+  id: string;
+  title: string;
+  description: string;
+  status: "draft" | "live";
+  study_guide: string;
+  study_guide_url?: string;
+  color: number;
+  icon: string;
+  domains: { id: string; name: string; weight: [number, number]; skill_areas: string[] }[];
+}
 
 export interface Question {
   id: string;
@@ -29,6 +43,10 @@ export interface Question {
 export interface CertInfo {
   cert: CertificationType;
   title: string;
+  description: string;
+  color: number;
+  icon: string;
+  status: "draft" | "live";
   questionCount: number;
 }
 
@@ -47,16 +65,37 @@ import type { SupportedLocale } from "./locales";
 
 // ── Constants ───────────────────────────────────────────────────────
 
-export const CERT_TITLES: Record<CertificationType, string> = {
-  "az-104": "Azure Administrator (AZ-104)",
-};
+const QUESTIONS_ROOT = join(process.cwd(), "..", "questions");
 
-const VALID_CERTS: CertificationType[] = ["az-104"];
+/**
+ * Certification registry: every questions/certs/*.json. Draft certs (new, still collecting questions) are built
+ * only when SHOW_DRAFT_CERTS=1 (the dev site); the public site lists live ones.
+ */
+export function loadCertRegistry(
+  root: string = QUESTIONS_ROOT,
+  showDrafts: boolean = process.env.SHOW_DRAFT_CERTS === "1",
+): CertDefinition[] {
+  const dir = join(root, "certs");
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".json"))
+    .sort()
+    .map((f) => JSON.parse(readFileSync(join(dir, f), "utf8")) as CertDefinition)
+    .filter((c) => c.status === "live" || (showDrafts && c.status === "draft"));
+}
+
+const CERTS: CertDefinition[] = loadCertRegistry();
+
+export const CERT_TITLES: Record<CertificationType, string> = Object.fromEntries(
+  CERTS.map((c) => [c.id, c.title]),
+);
+
+const VALID_CERTS: CertificationType[] = CERTS.map((c) => c.id);
 
 export { VALID_CERTS };
 
 function contentDir(locale: SupportedLocale): string {
-  return join(process.cwd(), "..", "questions", locale);
+  return join(QUESTIONS_ROOT, locale);
 }
 
 export { toDocLinks } from "./doc-links";
@@ -113,10 +152,14 @@ export function getCertCatalog(
   locale: SupportedLocale = DEFAULT_LOCALE,
 ): CertInfo[] {
   const all = loadAll(locale);
-  return VALID_CERTS.map((cert) => ({
-    cert,
-    title: CERT_TITLES[cert],
-    questionCount: all.filter((q) => q.cert === cert).length,
+  return CERTS.map((c) => ({
+    cert: c.id,
+    title: c.title,
+    description: c.description,
+    color: c.color,
+    icon: c.icon,
+    status: c.status,
+    questionCount: all.filter((q) => q.cert === c.id).length,
   }));
 }
 

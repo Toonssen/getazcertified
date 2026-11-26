@@ -25,7 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, Pause, Play, Timer, ArrowRight } from "lucide-react";
-import { SITE_REPO_URL } from "@/lib/site";
+import { questionReportUrl } from "@/lib/report";
 
 interface TimeTrialModeProps {
   questions: Question[];
@@ -58,10 +58,7 @@ export function TimeTrialMode({ questions }: TimeTrialModeProps) {
   } = useTimeTrialMode(questions);
 
   function buildReportHref(q: Question) {
-    const fileLink = `[${q.id}](${SITE_REPO_URL}/blob/main/questions/en/${q.cert}/question-${q.id.replace(`${q.cert}-`, "")}.md)`;
-    const title = encodeURIComponent(tQ("reportIssueTitle", { cert: q.cert, questionId: q.id }));
-    const body = encodeURIComponent(tQ("reportIssueBody", { question: q.question, fileLink }));
-    return `${SITE_REPO_URL}/issues/new?title=${title}&body=${body}&labels=question-issue`;
+    return questionReportUrl(q.cert, q.id, tQ("reportIssueTitle", { cert: q.cert, questionId: q.id }));
   }
 
   // Shared sidebar reused across phases

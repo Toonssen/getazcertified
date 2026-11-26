@@ -1,0 +1,77 @@
+{
+  "id": "az-104",
+  "title": "Azure Administrator (AZ-104)",
+  "description": "Identities and governance, storage, compute, virtual networking, and monitoring and backup for Azure administrators.",
+  "status": "live",
+  "study_guide": "2026-04-17",
+  "study_guide_url": "https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104",
+  "color": 1,
+  "icon": "server-cog",
+  "domains": [
+    {
+      "id": "identity-governance",
+      "name": "Manage Azure identities and governance",
+      "weight": [
+        20,
+        25
+      ],
+      "skill_areas": [
+        "entra-users-groups",
+        "access-azure-resources",
+        "subscriptions-governance"
+      ]
+    },
+    {
+      "id": "storage",
+      "name": "Implement and manage storage",
+      "weight": [
+        15,
+        20
+      ],
+      "skill_areas": [
+        "storage-access",
+        "storage-accounts",
+        "files-blob"
+      ]
+    },
+    {
+      "id": "compute",
+      "name": "Deploy and manage Azure compute resources",
+      "weight": [
+        20,
+        25
+      ],
+      "skill_areas": [
+        "arm-bicep",
+        "virtual-machines",
+        "containers",
+        "app-service"
+      ]
+    },
+    {
+      "id": "virtual-networking",
+      "name": "Implement and manage virtual networking",
+      "weight": [
+        15,
+        20
+      ],
+      "skill_areas": [
+        "virtual-networks",
+        "secure-vnet-access",
+        "name-resolution-load-balancing"
+      ]
+    },
+    {
+      "id": "monitor-maintain",
+      "name": "Monitor and maintain Azure resources",
+      "weight": [
+        10,
+        15
+      ],
+      "skill_areas": [
+        "monitor-resources",
+        "backup-recovery"
+      ]
+    }
+  ]
+}

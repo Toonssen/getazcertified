@@ -17,3 +17,8 @@ export const IS_PREVIEW = process.env.NEXT_PUBLIC_SITE_MODE === "preview";
 export const UPSTREAM_REPO_URL = "https://github.com/v-fidelusaleksander/ghcertified";
 export const MS_LEARN_CERTS_URL = "https://learn.microsoft.com/credentials/browse/?credential_types=certification";
 export const SITE_REPO_URL = `https://github.com/${SITE_REPO}`;
+/**
+ * Where contributions go, on every build: the public repo owns the questions and takes issues and pull requests
+ * (CONTRIBUTING.md there). The dev site points here too, so a report always lands where it can be fixed.
+ */
+export const CONTRIBUTE_REPO_URL = "https://github.com/Toonssen/getazcertified";

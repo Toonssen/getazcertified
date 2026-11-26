@@ -30,8 +30,9 @@ for (const path of APP_PAGES) {
     await page.waitForLoadState("networkidle");
     await expect(page.getByTestId("sneak-peek-banner")).toBeVisible();
     await expect(page.getByRole("link", { name: /challenge/i })).toHaveCount(0);
-    // Contributions and issue reports open at the full launch; no links to them yet.
-    await expect(page.getByRole("link", { name: /contribute|write a question|report/i })).toHaveCount(0);
+    // Links to contributing go to the public repo only (never the private dev repo).
+    const hrefs = await page.locator('a[href*="github.com"]').evaluateAll((els) => els.map((e) => e.getAttribute("href") ?? ""));
+    expect(hrefs.filter((h) => h.includes("getazcertified-dev"))).toEqual([]);
     expect(problems).toEqual([]);
   });
 }
@@ -67,6 +68,27 @@ test("question browser lists the AZ-104 questions", async ({ page }) => {
   await page.goto("/en/questions/az-104");
   await expect(page.getByText(/\d{2,} questions/i).first()).toBeVisible();
   expect(problems).toEqual([]);
+});
+
+test("report link opens the public repo's issue form with the question filled in", async ({ page }) => {
+  await page.goto("/en/questions/az-104");
+  const report = page.getByRole("link", { name: /report/i }).first();
+  await expect(report).toBeVisible({ timeout: 15_000 });
+  const url = new URL((await report.getAttribute("href")) ?? "");
+  expect(url.origin + url.pathname).toBe("https://github.com/Toonssen/getazcertified/issues/new");
+  expect(url.searchParams.get("template")).toBe("question-problem.yml");
+  expect(url.searchParams.get("question-id")).toBe("az-104-001");
+  expect(url.searchParams.get("question-file")).toBe(
+    "https://github.com/Toonssen/getazcertified/blob/main/questions/en/az-104/question-001.md",
+  );
+});
+
+test("contribute card points at CONTRIBUTING in the public repo", async ({ page }) => {
+  await page.goto("/en/practice-tests/az-104?questions=3");
+  // base-ui renders the Button as <a role="button">, so find the anchor itself.
+  const link = page.locator('a[href="https://github.com/Toonssen/getazcertified/blob/main/CONTRIBUTING.md"]');
+  await expect(link.first()).toBeVisible({ timeout: 15_000 });
+  await expect(link.first()).toContainText(/contribute/i);
 });
 
 test("challenges are not part of the sneak peek", async ({ page }) => {
