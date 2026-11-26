@@ -1,0 +1,171 @@
+/* Same palette and type as the app (dev.getazcertified.com): cool paper background, white chrome, blue-black ink,
+   deep teal primary, our own brand blue for the "az". Nunito variable, self-hosted. */
+
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url("/fonts/nunito-latin-wght.woff2") format("woff2");
+}
+
+:root {
+  --background: #F2F5F7;
+  --foreground: #13202C;
+  --card: #FFFFFF;
+  --primary: #0E6E85;
+  --primary-soft: #DCEFF3;
+  --muted-foreground: #5B6B78;
+  --border: #DCE3E8;
+  --brand-blue: #1C62C4;
+  --cert-az-104: #3557C5;
+  --radius: 14px;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 6px; }
+
+/* Top bar: the app's navbar, logo only. */
+.bar { background: var(--card); border-bottom: 1px solid var(--border); }
+.bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+}
+.brand { display: flex; align-items: center; gap: 10px; color: var(--foreground); }
+.brand:hover { text-decoration: none; }
+.logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wordmark { font-weight: 900; font-size: 19px; letter-spacing: -0.02em; }
+.az { color: var(--brand-blue); }
+
+/* Hero */
+.hero {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 72px 16px 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.pill {
+  margin: 0 0 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cert-az-104); }
+h1 {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(40px, 9vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+.lead {
+  margin: 20px 0 0;
+  max-width: 560px;
+  font-size: clamp(17px, 2.4vw, 20px);
+  color: var(--muted-foreground);
+}
+.points {
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 20px 24px;
+  width: 100%;
+  max-width: 460px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.points li {
+  position: relative;
+  padding-left: 30px;
+  font-weight: 600;
+}
+.points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--primary-soft);
+}
+.points li::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 6px;
+  width: 5px;
+  height: 9px;
+  border: solid var(--primary);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Footer: the app's footer text. */
+.foot {
+  border-top: 1px solid var(--border);
+  max-width: 760px;
+  width: calc(100% - 32px);
+  margin: 0 auto;
+  padding: 24px 0 32px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+.foot p { margin: 0 0 8px; }
+.foot p:last-child { margin: 0; }
+
+@media (min-width: 640px) {
+  .bar-inner { padding: 0 32px; height: 64px; }
+  .hero { padding-top: 112px; }
+}
