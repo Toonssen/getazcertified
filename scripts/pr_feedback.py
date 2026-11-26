@@ -126,10 +126,11 @@ def render(
             if "check" in other_failed else ""
         )
         parts.append(f"Also failed: {', '.join(f'`{j}`' for j in other_failed)} (see [the checks]({run_url})).{hint}")
-    elif report is not None and not (problems or spelling) and conclusion != "success":
-        parts.append(f"### ⚠️ The question rules pass, but another check failed\nSee [the checks]({run_url}).")
-    else:
-        parts.append("### ✅ All checks passed\nA maintainer will review the content (correct, original, clear, fair).")
+    elif report is not None and not (problems or spelling):
+        if conclusion != "success":
+            parts.append(f"### ⚠️ The question rules pass, but another check failed\nSee [the checks]({run_url}).")
+        else:
+            parts.append("### ✅ All checks passed\nA maintainer will review the content (correct, original, clear, fair).")
     if warnings:
         parts.append("For the maintainer (no action needed):\n\n" + fenced(capped(warnings)))
     good = {
