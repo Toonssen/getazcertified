@@ -91,6 +91,9 @@ class Page(HTMLParser):
                     check_local(href, self.path, self.where())
                 if attrs.get("target") == "_blank" and "noopener" not in attrs.get("rel", ""):
                     err(f"{self.where()}: target=_blank without rel=noopener")
+            elif tag == "link" and attrs.get("rel") == "canonical":
+                if not href.startswith("https://getazcertified.com/"):
+                    err(f"{self.where()}: canonical {href} is not on https://getazcertified.com/")
             elif is_external(href):
                 err(f"{self.where()}: external <{tag} href={href}>")
             else:
