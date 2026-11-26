@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { BookOpen, ChevronDown, CircleAlert, ExternalLink } from "lucide-react";
+import { BookOpen, ChevronDown, CircleAlert, ExternalLink, Pencil } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +26,10 @@ export interface QuestionCardProps {
   mainDocLabel?: string;
   reportLabel?: string;
   reportTooltip?: string;
+  /** "Improve" link: GitHub's web editor for the question's file (only where answers are visible anyway). */
+  editHref?: string;
+  editLabel?: string;
+  editTooltip?: string;
   children: ReactNode;
   footer: ReactNode;
 }
@@ -76,6 +80,9 @@ export function QuestionCard({
   mainDocLabel,
   reportLabel,
   reportTooltip,
+  editHref,
+  editLabel,
+  editTooltip,
   children,
   footer,
 }: QuestionCardProps) {
@@ -98,9 +105,24 @@ export function QuestionCard({
                 rel="noopener noreferrer"
                 className={headerButton}
                 title={reportTooltip}
+                aria-label={reportLabel}
               >
                 <CircleAlert className="size-3.5" />
                 <span className="hidden sm:inline">{reportLabel}</span>
+              </a>
+            )}
+            {editHref && editLabel && (
+              <a
+                href={editHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={headerButton}
+                title={editTooltip}
+                aria-label={editLabel}
+                data-testid="improve-link"
+              >
+                <Pencil className="size-3.5" />
+                <span className="hidden sm:inline">{editLabel}</span>
               </a>
             )}
           </div>

@@ -24,7 +24,7 @@ import { renderInlineMarkdown } from "@/lib/render-inline-markdown";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { AnswerList } from "@/components/quiz/AnswerList";
 import { FeedbackAlert } from "@/components/quiz/FeedbackAlert";
-import { questionReportUrl } from "@/lib/report";
+import { questionEditUrl, questionReportUrl } from "@/lib/report";
 
 interface QuestionBrowserProps {
   questions: Question[];
@@ -313,6 +313,9 @@ export function QuestionBrowser({ questions }: QuestionBrowserProps) {
         mainDocLabel={tQ("mainDoc")}
         reportLabel={tQ("report")}
         reportTooltip={tQ("reportTooltip")}
+        editHref={questionEditUrl(currentQuestion.cert, currentQuestion.id)}
+        editLabel={tQ("improve")}
+        editTooltip={tQ("improveTooltip")}
         footer={
           <div className="px-4 sm:px-7 py-4 sm:py-5 flex items-center justify-between gap-3 flex-wrap">
             <div>

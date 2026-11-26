@@ -11,7 +11,7 @@ import { getCertCatalog } from "@/lib/questions";
 import { parseSupportedLocale } from "@/lib/questions";
 import { getContributors } from "@/lib/contributors";
 import { buildAlternates, OG_IMAGES } from "@/lib/seo";
-import { IS_PREVIEW, SITE_NAME, SITE_REPO, SITE_TITLE, SITE_URL } from "@/lib/site";
+import { CONTRIBUTE_REPO_URL, IS_PREVIEW, SITE_NAME, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -48,7 +48,7 @@ export default async function HomePage({ params }: Props) {
   const catalog = getCertCatalog(parseSupportedLocale(locale));
   const totalQuestions = catalog.reduce((sum, c) => sum + c.questionCount, 0);
   // Preview: no contributor list (it would load avatars from GitHub, a third-party origin).
-  const contributors = IS_PREVIEW ? [] : await getContributors();
+  const contributors = getContributors();
   const heroDescription = t(IS_PREVIEW ? "heroDescriptionPreview" : "heroDescription");
 
   const jsonLd = {
@@ -269,7 +269,7 @@ export default async function HomePage({ params }: Props) {
                 className="group relative"
               >
                 <Image
-                  src={`${c.avatarUrl}&s=72`}
+                  src={c.avatar}
                   alt={c.login}
                   width={36}
                   height={36}
@@ -283,7 +283,7 @@ export default async function HomePage({ params }: Props) {
           <div className="mt-6">
             <Button
               variant="outline"
-              render={<a href={`https://github.com/${SITE_REPO}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener noreferrer" />}
+              render={<a href={`${CONTRIBUTE_REPO_URL}/blob/main/CONTRIBUTING.md`} target="_blank" rel="noopener noreferrer" />}
               nativeButton={false}
               className="h-auto rounded-[10px] px-5 py-2.5 text-[13px] font-medium"
             >
