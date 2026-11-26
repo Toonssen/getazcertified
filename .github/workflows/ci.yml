@@ -2,8 +2,11 @@ name: ci
 
 # Checks every pull request and push to main; deploys main to getazcertified.com after approval.
 #
-# The app and questions arrive as release PRs (snapshots from the development repo). Until the first release, the
-# app jobs pass without work and the landing page alone is deployed.
+# Who changes what (job `check` enforces it):
+# - questions and their docs are owned here: anyone, also from a fork, opens a PR (CONTRIBUTING.md);
+# - the app (app/, .node-version) arrives only as release PRs (snapshots from the development repo);
+# - the rest (.github/, site/, scripts) only from branches of this repo.
+# Job `questions` also leaves a feedback artifact on PRs; pr-feedback.yml turns it into a comment + labels.
 #
 # Security: permissions {} at the top and least privilege per job; checkout without persisted credentials; only
 # GitHub-owned actions + azure/login, all pinned by commit SHA; npm installs without lifecycle scripts; no secrets.
@@ -41,7 +44,7 @@ jobs:
         with:
           persist-credentials: false
           fetch-depth: 0
-      - name: Release-only paths (app/, questions/ change only through release PRs from the dev repo)
+      - name: Who may change which paths (contributions, releases, maintainer)
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -49,14 +52,23 @@ jobs:
         run: |
           set -euo pipefail
           HEAD_REPO=$(jq -r '.pull_request.head.repo.full_name' "$GITHUB_EVENT_PATH")
-          changed=$(git diff --name-only "origin/${BASE_REF}...HEAD" -- app questions scripts/check_questions.py cspell.json .node-version)
-          if [[ -n "$changed" ]] && { [[ "$HEAD_REF" != release/* ]] || [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; }; then
-            echo "::error::These paths are release snapshots of the dev repo and change only through a release PR:"
-            echo "$changed" | head -20
-            echo "Make the change in Toonssen/getazcertified-dev, merge it there, then run infra/release-to-prod.sh."
-            exit 1
+          changed=$(git diff --name-only "origin/${BASE_REF}...HEAD")
+          # Kept in sync with the dev repo's infra/sync-from-prod.sh (CONTRIBUTOR_PATHS).
+          contributor='^(questions/|docs/question-style/|scripts/(test_)?check_questions\.py$|cspell\.json$|CONTRIBUTING\.md$)'
+          release='^(app/|\.node-version$)'
+          fail() { echo "::error::$1"; printf '%s\n' "$2" | head -20; exit 1; }
+          if [[ "$HEAD_REF" == release/* && "$HEAD_REPO" == "$GITHUB_REPOSITORY" ]]; then
+            other=$(grep -vE "$release" <<<"$changed" || true)
+            [[ -z "$other" ]] || fail "A release PR carries only app/ and .node-version; questions are changed by PRs here. Other paths:" "$other"
+          else
+            app=$(grep -E "$release" <<<"$changed" || true)
+            [[ -z "$app" ]] || fail "The site's code (app/) is released from the development repo and isn't open to pull requests yet; please open an issue instead (https://github.com/Toonssen/getazcertified/issues/new/choose). Paths:" "$app"
+            if [[ "$HEAD_REPO" != "$GITHUB_REPOSITORY" ]]; then
+              outside=$(grep -vE "$contributor" <<<"$changed" || true)
+              [[ -z "$outside" ]] || fail "Pull requests from a fork can change the questions and their docs (questions/, docs/question-style/, cspell.json, CONTRIBUTING.md, the question checker). For anything else please open an issue. Paths:" "$outside"
+            fi
           fi
-          echo "release-only paths: ok"
+          echo "paths: ok"
       - name: Landing page checks (references, no third-party loads, no scripts, security headers)
         run: python3 scripts/check_site.py
       - name: No github.event expressions in workflows (untrusted input; read $GITHUB_EVENT_PATH with jq instead)
@@ -79,19 +91,70 @@ jobs:
 
   questions:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     permissions:
       contents: read
+    env:
+      CSPELL_VERSION: 10.4.1
+      npm_config_ignore_scripts: 'true'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: '3.13'
-      - name: Question rules
-        if: hashFiles('scripts/check_questions.py') != ''
-        run: python scripts/check_questions.py
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.node-version'
+      - name: Changed question files (PRs; push to main checks every question)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/feedback"
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            jq -r '.pull_request.number' "$GITHUB_EVENT_PATH" > "$RUNNER_TEMP/feedback/pr.txt"
+            git diff --name-only --diff-filter=d "origin/${BASE_REF}...HEAD" -- 'questions/' > "$RUNNER_TEMP/changed.txt"
+          else
+            git ls-files 'questions/' > "$RUNNER_TEMP/changed.txt"
+          fi
+          grep -E '^questions/en/[^/]+/question-[0-9]+\.md$' "$RUNNER_TEMP/changed.txt" > "$RUNNER_TEMP/questions.txt" || true
+          wc -l "$RUNNER_TEMP/changed.txt" "$RUNNER_TEMP/questions.txt"
+      - name: Checker tests
+        run: python -m unittest discover -s scripts -v
+      - name: Question rules (changed questions also get their Learn links checked)
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          mapfile -t files < "$RUNNER_TEMP/questions.txt"
+          if [[ "$GITHUB_EVENT_NAME" == pull_request && ${#files[@]} -gt 0 ]]; then
+            python scripts/check_questions.py --links --report "$RUNNER_TEMP/feedback/report.json" "${files[@]}"
+          else
+            python scripts/check_questions.py --report "$RUNNER_TEMP/feedback/report.json"
+          fi
+      - name: Spelling (cspell, pinned; real Azure terms go in cspell.json)
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          mapfile -t files < "$RUNNER_TEMP/questions.txt"
+          : > "$RUNNER_TEMP/feedback/spelling.txt"
+          (( ${#files[@]} )) || { echo "no question files changed"; exit 0; }
+          status=0
+          npx --yes "cspell@${CSPELL_VERSION}" --no-progress --no-summary --no-color --config cspell.json "${files[@]}" > "$RUNNER_TEMP/cspell.txt" || status=$?
+          cat "$RUNNER_TEMP/cspell.txt"
+          # "path:line:col - Unknown word (xyz)" → inline annotation + the feedback comment
+          sed -nE 's#^(\./)?([^:]+):([0-9]+):([0-9]+) - (.*)$#\2:\3: \5#p' "$RUNNER_TEMP/cspell.txt" > "$RUNNER_TEMP/feedback/spelling.txt"
+          sed -nE 's#^(\./)?([^:]+):([0-9]+):([0-9]+) - (.*)$#::error file=\2,line=\3,col=\4,title=Spelling::\5#p' "$RUNNER_TEMP/cspell.txt"
+          exit "$status"
+      - name: Feedback for the PR comment (read by pr-feedback.yml, treated as untrusted there)
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pr-feedback
+          path: ${{ runner.temp }}/feedback/
+          retention-days: 3
 
   unit:
     runs-on: ubuntu-latest
