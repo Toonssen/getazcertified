@@ -18,6 +18,22 @@ GitHub holds the workflows of someone without a merged PR until you click **Appr
 every push. If they pushed several commits within seconds, GitHub sometimes creates no checks for the newest commit
 (seen 2026-11-26), and no button shows up. Close and reopen the PR: that starts the checks for the latest commit.
 
+## Changing the workflows: the feedback bot
+
+`pr-feedback.yml` greets first-timers, comments and labels on every pull request, also from forks. It runs on
+`workflow_run` (after `ci`) with a write token, so it carries the same risk as `pull_request_target`: a stranger's pull
+request starts a job that can write to this repo. It is safe only because it runs **main's code** and treats the `ci`
+artifact as data. Keep it that way:
+
+- Never check out or run the pull request's code in it (no `ref:` other than `main`, no `npm install`, build or test,
+  no script taken from the artifact). Anything that needs the PR's code belongs in `ci.yml` (`pull_request`, read-only).
+- Treat everything from the artifact and the PR (title, branch name, report text) as untrusted: read it from files or
+  `$GITHUB_EVENT_PATH`, never put it into `${{ }}` inside `run:`, and re-check it against the API like
+  `scripts/pr_feedback.py` does.
+- No `pull_request_target` anywhere. If something needs write access on fork PRs, add it to `scripts/pr_feedback.py`.
+
+Run the dev repo's `infra/audit-prod-repo.sh` before merging any workflow change.
+
 ## Reviewing a question
 
 The checks already cover the format, links, spelling and numbering. The review is about the content:
