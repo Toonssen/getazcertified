@@ -33,6 +33,8 @@ LEARN_PREFIX = "https://learn.microsoft.com/"
 # Certifications are data: one questions/certs/<cert>.json each (see CONTRIBUTING.md › Propose a new certification).
 # The app builds its catalog from the same files.
 CERT_STATUSES = ("draft", "live")
+# Difficulty profile per cert (docs/question-style/exam-writing-rules.md › "Difficulty profiles").
+CERT_LEVELS = ("fundamentals", "associate", "expert", "specialty")
 CERT_COLORS = range(1, 9)  # palette slots --cert-1..8 in app/src/app/globals.css (the CSP forbids inline colours)
 CERT_ICONS = (  # lucide icons the app maps (app/src/lib/cert-meta.tsx); generic glyphs, never Microsoft logos
     "server-cog", "shield-check", "network", "database", "brain", "cloud", "code", "lock",
@@ -71,6 +73,9 @@ def load_certs(certs_dir: Path | None = None) -> tuple[dict[str, dict], list[str
             errs.append(f"{where}: status must be \"draft\" (new, hidden on the site) or \"live\" (maintainers only)")
         if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", str(c["study_guide"])):
             errs.append(f"{where}: study_guide must be the date of the official study guide's skills list, YYYY-MM-DD")
+        if c.get("level") not in CERT_LEVELS:
+            errs.append(f"{where}: level must be one of {', '.join(CERT_LEVELS)}: the Microsoft level of the exam, "
+                        "which sets the difficulty profile in docs/question-style/exam-writing-rules.md")
         if c["color"] not in CERT_COLORS:
             errs.append(f"{where}: color must be a palette slot from 1 to 8 (see app/src/app/globals.css)")
         if c["icon"] not in CERT_ICONS:
@@ -131,6 +136,12 @@ DOC_TITLE_FILLER = re.compile(r"microsoft learn|\bdocs?\b|\bdocumentation\b|\s-\
 NUMBER_WORDS = {"two": 2, "three": 3, "four": 4}
 COUNT_RE = re.compile(r"\b(?:Which|What)\s+(two|three|four)\b", re.IGNORECASE)
 ANSWER_RE = re.compile(r"^(?:\d+\.|-) \[([xX ]?)\] (.*)$")
+# Answers are shuffled on the site, so no answer may point at other answers or at a position.
+POSITIONAL_RE = re.compile(
+    r"\b(?:all|none|both|neither) of the (?:above|below|following|options|answers|choices)\b"
+    r"|\b(?:answers?|options?|choices?) [A-F1-6]\b", re.IGNORECASE)
+LEAD_IN_ARCHETYPES = ("best-choice", "exhibit-select", "calculate", "fact-recall", "choose-n", "complete-code")
+MIN_OPTIONS, MAX_OPTIONS = 3, 6
 LINK_RE = re.compile(r"https://learn\.microsoft\.com/[^\s)\]>\"']+")
 
 
@@ -355,6 +366,13 @@ def check(q: Question) -> list[str]:
     texts = [t for _, t, _ in q.answers]
     if len(set(texts)) != len(texts):
         errs.append("duplicate answer text")
+    for t in texts:
+        if POSITIONAL_RE.search(t):
+            errs.append(f"answer {t[:40]!r} refers to other answers; the site shuffles answers, so each must stand alone "
+                        "(and never use all/none of the above)")
+    yes_no = m.get("archetype") in ("exhibit-statement", "goal-solution")
+    if not yes_no and not MIN_OPTIONS <= len(q.answers) <= MAX_OPTIONS:
+        errs.append(f"has {len(q.answers)} answers; use {MIN_OPTIONS} to {MAX_OPTIONS} (Yes/No archetypes use exactly 2)")
 
     stem = m.get("question", "")
     stem_lines = stem.split("\n")
@@ -373,6 +391,10 @@ def check(q: Question) -> list[str]:
         errs.append("choose-n question must ask 'Which two/three ...'")
     if m.get("archetype") in ("exhibit-statement", "goal-solution") and sorted(texts) != ["No", "Yes"]:
         errs.append(f"{m['archetype']} answers must be exactly Yes and No")
+    if m.get("archetype") in LEAD_IN_ARCHETYPES and not stem.rstrip().endswith("?"):
+        errs.append(f"{m['archetype']} question must end with its question, e.g. \"What should you use?\"")
+    if m.get("archetype") == "goal-solution" and not ("Solution:" in stem and "Does this meet the goal?" in stem):
+        errs.append("goal-solution question needs a \"Solution: ...\" paragraph and ends with \"Does this meet the goal?\"")
     if m.get("archetype", "").startswith("exhibit") and "```" not in q.body:
         errs.append("exhibit question has no exhibit block")
     return errs

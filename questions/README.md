@@ -2,15 +2,16 @@
 
 Questions are Markdown files parsed by [mdquiz](https://github.com/v-fidelusaleksander/mdquiz). This is the format
 inherited from [ghcertified](https://github.com/FidelusAleksander/ghcertified), plus the rules getazcertified adds
-for Azure exams. **How the questions should read** (voice, archetypes, exhibits, distractors) is in the per-exam
-style guide, e.g. [`docs/question-style/az-104.md`](../docs/question-style/az-104.md).
+for Azure exams. **How the questions should read**: the general rules and difficulty profiles in
+[`docs/question-style/exam-writing-rules.md`](../docs/question-style/exam-writing-rules.md), then the per-exam style
+guide, e.g. [`docs/question-style/az-104.md`](../docs/question-style/az-104.md).
 
 ## Files
 
 - One question per file, `questions/en/<cert>/question-NNN.md` (zero-padded: `question-042.md`). Numbers run on without
   gaps: use the next free number (CI prints it, and tells you if a file needs renaming).
-- Each certification is described by `questions/certs/<cert>.json` (title, study-guide date, skill areas, colour,
-  icon, `draft` or `live`); the site builds its catalog from these files. Certs: `az-104`. How to add one:
+- Each certification is described by `questions/certs/<cert>.json` (title, level, study-guide date, skill areas,
+  colour, icon, `draft` or `live`); the site builds its catalog from these files. Certs: `az-104`. How to add one:
   [CONTRIBUTING.md › Propose a new certification](../CONTRIBUTING.md#propose-a-new-certification).
 
 ## Template
@@ -116,6 +117,10 @@ The skill areas per functional group, with the study guide's weights, are in the
 - There are at least 2 answers and at least one correct, with no duplicates, and every answer has an explanation.
 - "Which two/three…" matches the number of correct answers, and multi-select always says how many.
 - `exhibit-statement` and `goal-solution` answers are exactly `Yes` and `No`. `exhibit-*` questions have an exhibit block.
+- Other questions have 3 to 6 answers, and none refers to another answer ("all of the above", "answers A and B"),
+  because answers are shuffled. Question-style archetypes (`best-choice`, `exhibit-select`, `calculate`,
+  `fact-recall`, `choose-n`, `complete-code`) end with their question mark; `goal-solution` has a `Solution:`
+  paragraph and asks "Does this meet the goal?".
 - Question numbers have no gaps; certification files in `questions/certs/` are valid, every question folder has one,
   and a `live` cert has at least 20 questions.
 - Once every functional group has questions, the share of each should fall inside the study-guide weights. This

@@ -3,6 +3,7 @@
   "title": "Azure Administrator (AZ-104)",
   "description": "Identities and governance, storage, compute, virtual networking, and monitoring and backup for Azure administrators.",
   "status": "live",
+  "level": "associate",
   "study_guide": "2026-04-17",
   "study_guide_url": "https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104",
   "color": 1,

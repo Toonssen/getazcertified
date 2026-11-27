@@ -207,6 +207,34 @@ class CheckTests(unittest.TestCase):
         fixed = text.replace("\n---\n\n", "\n---\n\n```text\nName  Kind\nst1   StorageV2\n```\n\n")
         self.assertEqual(self.errors(fixed), [])
 
+    def test_answers_must_not_point_at_other_answers(self):
+        for text in ("All of the above", "None of the following", "Both of the above", "Answers A and B", "Option 2"):
+            bad = GOOD.replace("- [ ] Third", f"- [ ] {text}")
+            self.assertTrue(any("refers to other answers" in e for e in self.errors(bad)), text)
+        # Ordinary words must not trip it.
+        ok = GOOD.replace("- [ ] Third", "- [ ] Assign the Reader role to all of the users")
+        self.assertEqual(self.errors(ok), [])
+
+    def test_option_count(self):
+        two = GOOD.replace("- [ ] Third\n  > Why third is wrong.\n", "")
+        self.assertTrue(any("use 3 to 6" in e for e in self.errors(two.replace('"choose-n"', '"best-choice"')
+                                                                    .replace("Which two actions", "Which action")
+                                                                    .replace("- [x] Second", "- [ ] Second"))))
+        seven = GOOD + "".join(f"- [ ] Extra {n}\n  > Why not.\n" for n in range(5))
+        self.assertTrue(any("has 8 answers" in e for e in self.errors(seven)))
+
+    def test_lead_in_archetypes_end_with_a_question(self):
+        bad = GOOD.replace("Which two actions can you perform?", "Select two actions.")
+        self.assertTrue(any("must end with its question" in e for e in self.errors(bad)))
+
+    def test_goal_solution_shape(self):
+        head = (GOOD.replace("Which two actions can you perform?", "You need to block public access.\n\n  Solution: You set X.\n\n  Is that enough?")
+                .replace('"choose-n"', '"goal-solution"').split("\n---\n")[0])
+        text = head + "\n---\n\n- [x] Yes\n  > Because.\n- [ ] No\n  > Because not.\n"
+        self.assertTrue(any("Does this meet the goal?" in e for e in self.errors(text)))
+        fixed = text.replace("Is that enough?", "Does this meet the goal?")
+        self.assertEqual(self.errors(fixed), [])
+
     def test_unknown_key_and_unsupported_yaml(self):
         self.assertTrue(any("unknown frontmatter key" in e for e in self.errors(GOOD.replace("---\n\n-", 'extra: "x"\n---\n\n-'))))
         with self.assertRaises(cq.FormatError):
@@ -237,6 +265,7 @@ GOOD_CERT = {
     "title": "Security Operations Analyst (SC-500)",
     "description": "Threat detection and response with Microsoft security tools for a test certification.",
     "status": "draft",
+    "level": "associate",
     "study_guide": "2026-05-01",
     "color": 2,
     "icon": "shield-check",
@@ -274,6 +303,7 @@ class CertRegistryTests(unittest.TestCase):
             "color": (12, "palette slot from 1 to 8"),
             "status": ("published", '"draft"'),
             "study_guide": ("May 2026", "YYYY-MM-DD"),
+            "level": ("hard", "level must be one of"),
         }
         for key, (value, expected) in cases.items():
             _, errs = self.certs(**{key: value})

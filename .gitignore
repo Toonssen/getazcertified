@@ -11,3 +11,7 @@ app/node_modules/
 app/playwright-report/
 app/test-results/
 __pycache__/
+
+# Claude Code: per-machine files (runs of the write-questions skill, local hooks)
+.claude/local/
+.claude/settings.local.json
