@@ -1,34 +1,28 @@
 ---
 question: |-
-  You have an Azure virtual machine named vm-fin2 that runs Windows Server and an Azure key vault named kv-fin.
+  Your company plans to deploy a new Azure virtual machine named vm-pay4 that runs Ubuntu Server.
 
-  You need to encrypt vm-fin2. The solution must meet the following requirements:
+  The security team sets the following requirements for vm-pay4:
 
-  - Use a key stored in kv-fin.
-  - Encrypt the operating system disk and the data disks.
-  - Keep the disk contents encrypted inside the guest operating system, so they remain unreadable if a VHD is copied out of Azure.
+  - The operating system disk, the data disks, the temp disk, and the disk caches must be encrypted at rest.
+  - The encryption method must not be one that Microsoft has scheduled for retirement.
 
-  Which encryption method should you use?
+  Which encryption method should you configure for vm-pay4?
 documentation:
   - title: "Disk encryption options"
     url: "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption-overview"
-  - title: "Server-side encryption of managed disks"
-    url: "https://learn.microsoft.com/en-us/azure/virtual-machines/disk-encryption"
 skill_area: "virtual-machines"
 study_guide: "2026-04-17"
 archetype: "best-choice"
 ---
 
-- [x] Azure Disk Encryption
-  > Azure Disk Encryption runs BitLocker inside the VM, with keys in Key Vault, so the volumes themselves are
-  > encrypted. Note: it retires on September 15, 2028, and encryption at host is the recommended choice for new
-  > VMs that don't need guest-level encryption.
-- [ ] Encryption at host
-  > Encryption at host encrypts at the Azure host (disks, caches, temp disk). The guest sees plain data, so it
-  > doesn't meet the guest-level requirement.
+- [x] Encryption at host
+  > Encryption at host also encrypts the temp disk and the disk caches at rest, and it's the option Microsoft
+  > recommends for new VMs.
+- [ ] Azure Disk Encryption
+  > Azure Disk Encryption encrypts the disks inside the VM, but it's scheduled for retirement on September 15,
+  > 2028. New VMs should use encryption at host instead.
 - [ ] Server-side encryption with a customer-managed key
-  > Server-side encryption protects data at rest in the storage platform and decrypts it as it's read, so it isn't
-  > guest-level encryption.
+  > Server-side encryption covers the OS and data disks, but it doesn't encrypt the temp disk or the disk caches.
 - [ ] Confidential disk encryption
-  > This is only for confidential VM sizes and binds the keys to the VM's TPM. It isn't a general option for an
-  > existing standard VM.
+  > Confidential disk encryption protects only the OS disk, and it binds the keys to the TPM of a confidential VM.
