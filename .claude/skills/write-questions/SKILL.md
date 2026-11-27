@@ -31,8 +31,11 @@ Keep everything for a run in `.claude/local/runs/<YYYY-MM-DD>-<cert>-<slug>/` (g
   read **today's** page (a docs clone can be months old).
 - The profile sets how many sources a question needs. An expert question that combines services cites every page it
   relies on (max 3).
-- In `sources.md`, for each question, record the URL and the exact sentences that prove the key and each
-  explanation. A claim without a quoted sentence doesn't go in a question.
+- In `sources.md`, for each question, record the URL and the exact sentences that prove the key, **each planned
+  distractor** and each explanation. A claim without a quoted sentence doesn't go in a question (a distractor
+  without one can't be explained, so the writer will have to swap it).
+- Quote what the page says, not what you infer from it. If the page doesn't state a "can't", write the question
+  about what it does state.
 - Never use another question set (exam items, braindumps, practice tests, courses, other sites) as a source.
 
 ## 3. Draft
@@ -44,7 +47,10 @@ folder and to obey:
 
 - invented scenario and object names, the cert's voice, the profile's scenario size and exhibits;
 - one defensible key; distractors from rule 4; no cues; options that stand alone (answers are shuffled);
-- every explanation sentence backed by a quoted sentence in `sources.md`.
+- every explanation sentence backed by a quoted sentence in `sources.md`, **in its own words**: quotes are
+  proof, not text to paste (the Learn-run gate catches pasted sentences);
+- no absolute words (*only*, *always*, *never*, *all*) unless the page says them;
+- when the key depends on something being absent (no lock, no other role), the stem says so.
 
 ## 4. Gates
 

@@ -47,7 +47,9 @@ beyond the points below is our own practice and is labeled as such.
    work without it.
 8. **No tricks.** No double negatives, no hidden "not". When one word decides the answer, put it in plain sight.
 9. **Current and true.** Every fact behind the key and behind each explanation is on a cited Learn page, checked
-   today. Name the assumed value when a limit or a date may change.
+   today. Name the assumed value when a limit or a date may change. Don't make a claim stronger than the page: no *only*,
+   *always* or *never* unless it says so. When the key depends on something being absent (no resource lock, no
+   other role assignment), the stem says so.
 10. **Original.** Invented scenario, our own words, our own object names. See
     [Originality](../../questions/README.md#originality).
 
@@ -75,6 +77,7 @@ When the profiles and the per-exam style guide disagree, the style guide wins fo
 - **Not allowed:** real exam items, braindumps, practice tests or courses (Microsoft's own practice assessments
   included), and other question sites. Remembered questions count as copied.
 - Cite what proves the answer: 1–3 links in `documentation`, main page first.
+- Write explanations in your own words. Exact names of settings and commands are fine; copied sentences are not.
 
 ## Checks and review
 
@@ -89,7 +92,8 @@ When the profiles and the per-exam style guide disagree, the style guide wins fo
 
 1. *Skill:* tests the `skill_area` it claims, at the cert's level.
 2. *Key:* exactly one defensible answer, provable from the cited pages.
-3. *Explanations:* every claim is on a cited page. Wrong answers say why they fail *here*.
+3. *Explanations:* every claim is on a cited page, in our own words and no stronger than the page. Wrong answers
+   say why they fail *here*.
 4. *Distractors:* each one is plausible for a partly prepared candidate. None is a joke option.
 5. *Cues:* no length, wording or grammar cue points at the key.
 6. *Profile:* scenario size, exhibit and number of sources match the level.
