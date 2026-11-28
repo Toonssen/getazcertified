@@ -25,6 +25,9 @@ Public repo behind **getazcertified.com**: the landing page (`site/`) plus the *
 - **Deploy**: job `deploy` after all checks, on main only → environment `production` (required reviewer approves each
   run, no admin bypass) → Azure OIDC → Key Vault → `wrangler pages deploy dist` to Pages project `getazcertified`.
   GitHub holds identifiers only (repo variables), **never secrets**.
+- **New questions**: the `write-questions` skill (`.claude/skills/write-questions/`) follows
+  `docs/question-style/exam-writing-rules.md` and the cert's `level` profile; it stops before the commit for robertt's
+  spot-check. Stacked PRs and the post-merge check: `MAINTAINING.md` › "Merging".
 - **Contributors**: be kind and quick (targets, review checklist and reply templates in `MAINTAINING.md`); test any
   contributor-facing change as ToonssenTest (dev repo `infra/contributor-flow-test.py`).
 - Run the dev repo's `infra/audit-prod-repo.sh` **before** merging any workflow or settings change here.

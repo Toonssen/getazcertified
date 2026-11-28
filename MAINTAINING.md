@@ -55,6 +55,14 @@ question's id).
   click, or push to their branch if they allowed edits, rather than asking for another round.
 - A new certification stays `draft` until it has at least 20 questions over its skill groups. Going `live` is a
   maintainer PR that also adds its skill-area table to `questions/README.md`.
+- Several maintainer PRs that build on each other: chain their bases and link them as a GitHub stack with the
+  [`gh stack`](https://github.com/github/gh-stack) extension (`GH_REPO=Toonssen/getazcertified gh stack link 52 53 54`,
+  bottom first; it doesn't take `-R`). Linking also runs the checks on every PR in the stack, not just the bottom one.
+  Merging the top PR lands the whole stack on main, bottom up; over the API that's
+  `PUT /repos/Toonssen/getazcertified/pulls/<top>/merge-async` with `merge_method=squash` and the head `sha`.
+- After every merge to main, check that a `ci` run started for the new commit (`gh run list -R Toonssen/getazcertified
+  --branch main`). Once (2026-11-28) a merge started none; `gh workflow run ci.yml -R Toonssen/getazcertified --ref main`
+  starts it, and the deploy still waits for approval.
 
 ## Replies
 
