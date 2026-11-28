@@ -32,7 +32,9 @@ Public repo behind **getazcertified.com**: the landing page (`site/`) plus the *
   checks (`check`, `questions`, `unit`, `build`, `e2e`, CodeQL). Commits are signed with SSH (`gpg.format ssh`).
 - **Actions**: only GitHub-owned actions and `azure/login` are allowed, pinned by full commit SHA (tag in a comment);
   every workflow starts with `permissions: {}` and grants per job. No `pull_request_target`, no `${{ github.event.* }}`
-  inside `run:`, `persist-credentials: false` on checkout, `npm ci --ignore-scripts`. Fork PRs from first-time contributors need approval before workflows run.
+  inside `run:`, `persist-credentials: false` on checkout, `npm ci --ignore-scripts`. `pr-feedback.yml` (`workflow_run`, write token, also for fork PRs and the first-timer
+  greeting) has the same risk as `pull_request_target`: it must never check out or run PR code or artifact content
+  (see `MAINTAINING.md` › "Changing the workflows"). Fork PRs from first-time contributors need approval before workflows run.
 - **Landing page rules** (`python3 scripts/check_site.py`): no JavaScript, no inline styles, nothing loaded from another
   origin (fonts are self-hosted), security headers in `site/_headers` (also the base for the app's headers). No Microsoft logos or cert badges;
   keep the "not affiliated with Microsoft" line and the ghcertified credit.
