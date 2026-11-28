@@ -11,6 +11,7 @@
   "Footer": {
     "tagline": "Free practice questions for <link>Microsoft Azure certifications</link>, written from the Microsoft Learn documentation.",
     "disclaimer": "getazcertified is an independent study site. It is not affiliated with, endorsed by or sponsored by Microsoft. Microsoft and Azure are trademarks of the Microsoft group of companies. Questions are original and never taken from real exams.",
+    "source": "getazcertified is open source. Report, fix or add a question <repo>on GitHub</repo>.",
     "credit": "Built on <link>ghcertified</link> by Aleksander Fidelus, licensed under GPL-3.0."
   },
   "Home": {

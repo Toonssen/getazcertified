@@ -117,7 +117,7 @@ export function Navbar() {
             <CheckCircle />
           </div>
           <span className="font-display font-black text-[19px] text-foreground tracking-[-0.02em]">
-            get<span className="text-brand-blue">az</span>certified
+            get<span className="text-primary">az</span>certified
           </span>
         </Link>
 

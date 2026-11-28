@@ -34,3 +34,13 @@ test("leaderboard page loads", async ({ page }) => {
   await expect(page.locator("main")).toBeVisible();
   await expect(page.getByRole("heading", { name: /leaderboard/i })).toBeVisible();
 });
+
+test("footer links to the public repo and credits ghcertified", async ({ page }) => {
+  await page.goto("/en/");
+  const footer = page.locator("footer");
+  await expect(footer.getByRole("link", { name: "on GitHub" })).toHaveAttribute(
+    "href",
+    "https://github.com/Toonssen/getazcertified",
+  );
+  await expect(footer.getByRole("link", { name: "ghcertified" })).toBeVisible();
+});
