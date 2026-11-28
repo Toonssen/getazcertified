@@ -3,6 +3,8 @@
 
 - copies app/out, then removes what the sneak peek doesn't serve: challenges, the root redirect, Next's 404 pages
 - puts the landing page at / (site/index.html + its CSS, fonts, icon) and the static site/404.html as the 404 page
+- fills the landing page's <!-- contributors --> marker with the public repo's contributors (count + same-origin avatars),
+  read from contributors/contributors.json that the app build saved (app/scripts/fetch-contributors.mjs)
 - writes dist/_headers: the security headers from site/_headers, with a Content-Security-Policy whose script-src is
   'self' plus the sha256 of every inline executable <script> in the built pages (no 'unsafe-inline', no 'unsafe-eval');
   /en/* gets X-Robots-Tag noindex; Next's hashed static files are cached as immutable
@@ -15,6 +17,8 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import html as htmllib
+import json
 import re
 import shutil
 import sys
@@ -58,6 +62,65 @@ class InlineScripts(HTMLParser):
             self._buf = None
 
 
+CONTRIBUTORS_MARKER = "<!-- contributors -->"
+LOGIN_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
+AVATAR_RE = re.compile(r"^/contributors/[A-Za-z0-9-]+\.(?:png|jpg)$")
+
+
+def load_contributors(dist: Path) -> list[dict]:
+    """Valid entries of dist/contributors/contributors.json (same rules as app/src/lib/contributors.ts); [] if missing."""
+    try:
+        data = json.loads((dist / "contributors" / "contributors.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    if not isinstance(data, list):
+        return []
+    out = []
+    for c in data:
+        if not isinstance(c, dict):
+            continue
+        login, avatar = c.get("login"), c.get("avatar")
+        if not (isinstance(login, str) and LOGIN_RE.match(login) and isinstance(avatar, str) and AVATAR_RE.match(avatar)):
+            continue
+        if not (dist / avatar.lstrip("/")).is_file():
+            continue
+        try:
+            n = int(c.get("contributions") or 0)
+        except (TypeError, ValueError):
+            n = 0
+        out.append({"login": login, "avatar": avatar, "contributions": n})
+    return out
+
+
+def render_contributors(people: list[dict]) -> str:
+    """The HTML that replaces the marker: a count and one linked avatar per contributor. Empty list -> nothing."""
+    if not people:
+        return ""
+    n = len(people)
+    count = f'<p class="community-count">{n} {"person has" if n == 1 else "people have"} helped build getazcertified</p>'
+    items = []
+    for c in people:
+        login = htmllib.escape(c["login"])
+        k = c["contributions"]
+        tip = f'{login}: {k} contribution{"" if k == 1 else "s"}'
+        items.append(
+            f'<li><a href="https://github.com/{login}" rel="noopener noreferrer" title="{tip}">'
+            f'<img src="{htmllib.escape(c["avatar"])}" alt="{login}" width="36" height="36" loading="lazy"></a></li>'
+        )
+    return count + '\n      <ul class="avatars" aria-label="Contributors">' + "".join(items) + "</ul>"
+
+
+def fill_landing(dist: Path) -> int:
+    """Replace the marker in dist/index.html; returns the number of contributors shown. Fails if the marker is gone."""
+    page = dist / "index.html"
+    text = page.read_text(encoding="utf-8")
+    if text.count(CONTRIBUTORS_MARKER) != 1:
+        fail(f"site/index.html must contain {CONTRIBUTORS_MARKER} exactly once")
+    people = load_contributors(dist)
+    page.write_text(text.replace(CONTRIBUTORS_MARKER, render_contributors(people)), encoding="utf-8")
+    return len(people)
+
+
 def fail(msg: str) -> None:
     print(f"assemble: {msg}", file=sys.stderr)
     sys.exit(1)
@@ -95,6 +158,10 @@ def main() -> None:
             shutil.copytree(item, target, dirs_exist_ok=True)
         else:
             shutil.copy2(item, target)
+
+    shown = fill_landing(dist)
+    if not shown:
+        print("::warning::assemble: no contributors found, the landing page shows none", file=sys.stderr)
 
     hashes: set[str] = set()
     for page in sorted(dist.rglob("*.html")):
@@ -148,7 +215,7 @@ def main() -> None:
     (dist / "_headers").write_text("\n".join(lines), encoding="utf-8")
 
     pages = len(list(dist.rglob("*.html")))
-    print(f"assemble: {pages} pages, {len(hashes)} inline script hashes, CSP {len(csp)} chars -> {dist}")
+    print(f"assemble: {pages} pages, {shown} contributors, {len(hashes)} inline script hashes, CSP {len(csp)} chars -> {dist}")
 
 
 if __name__ == "__main__":
