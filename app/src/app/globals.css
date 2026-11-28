@@ -60,7 +60,6 @@
   --color-cert-6: var(--cert-6);
   --color-cert-7: var(--cert-7);
   --color-cert-8: var(--cert-8);
-  --color-brand-blue: var(--brand-blue);
   --color-hover-ring: var(--primary-soft);
   --color-star: var(--star);
   --color-star-glow: var(--star-glow);
@@ -131,7 +130,6 @@
   --cert-7: #4A5568;
   --cert-8: #8A5A00;
   /* The "az" in the wordmark. Our own blue, deliberately not Microsoft's #0078D4. 5.8:1 on white. */
-  --brand-blue: #1C62C4;
 }
 
 @layer base {
