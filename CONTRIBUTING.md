@@ -23,7 +23,7 @@ this" so nobody else starts on it at the same time.
 2. **Backed by Learn.** Every explanation must follow from the one to three Learn pages you cite.
 3. **Explain every answer**, the wrong ones too: why it's wrong is where people learn.
 
-How a good question reads (voice, scenario types, distractors): the style guide,
+How a good question reads: the [exam writing rules](docs/question-style/exam-writing-rules.md), then the style guide,
 [`docs/question-style/az-104.md`](docs/question-style/az-104.md). The full file format: [`questions/README.md`](questions/README.md).
 
 ## Add a question
@@ -81,7 +81,8 @@ and propose the change.
    first, so we can agree on it before you write questions.
 2. Then, in a pull request:
    - Add `questions/certs/<exam>.json`, copied from [`questions/certs/az-104.json`](questions/certs/az-104.json):
-     exam code as `id` (e.g. `sc-500`), title, one-sentence description, the study guide's date and skill groups
+     exam code as `id` (e.g. `sc-500`), title, one-sentence description, `level` (`fundamentals`, `associate`,
+     `expert` or `specialty`, see [exam writing rules](docs/question-style/exam-writing-rules.md#difficulty-profiles)), the study guide's date and skill groups
      (with their weights and your skill-area names), a colour slot 1–8 and an icon from the list CI gives you.
      Keep `"status": "draft"`: draft certifications aren't shown on the site yet.
    - Add questions in `questions/en/<exam>/`, starting at `question-001.md`.
